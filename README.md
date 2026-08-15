@@ -106,6 +106,8 @@ Dokümanlara özel bir işaretleme eklemeden çalışan şeyler:
 | ` ```java `, `json`, `sql`, `bash`, `xml`, `yaml`, `properties`, `diff` | Sözdizimi vurgulaması |
 | `TESTING.md` gibi dosya adları | Bağlantıya dönüşür |
 | `Bkz. TESTING.md — Mock ne zaman tasarım kokusudur` | Doğrudan o başlığa gider |
+| `<!-- component:HashMapBuckets -->` | Canlı bucket hesabı |
+| `<!-- component:DecoratorChain -->` | Katman sırası simülasyonu |
 
 Atıflar yalnızca **var olan** dosyalara bağlanır; olmayan bir dosya adı düz metin
 kalır, kırık bağlantı üretilmez. Başlık kısmı ancak hedefte eşleşen bir başlık
@@ -166,5 +168,4 @@ src/
 - Okuma ilerlemesi ve okundu işaretleri
 - Klavye navigasyonu (`j/k`, `n/p`)
 - Yazdırma / PDF için baskı stilleri
-- Kalan interaktif bileşenler: HashMapBuckets, DecoratorChain
 - Paket bölme — ana paket şu an ~950 kB (gzip ~300 kB)

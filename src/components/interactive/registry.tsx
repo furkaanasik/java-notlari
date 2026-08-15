@@ -1,6 +1,8 @@
 import type { ComponentType } from 'react'
 import { PatternGraph } from './PatternGraph'
 import { SmellMap } from './SmellMap'
+import { HashMapBuckets } from './HashMapBuckets'
+import { DecoratorChain } from './DecoratorChain'
 
 /**
  * Markdown içinden çağrılabilen interaktif bileşenler.
@@ -21,4 +23,6 @@ export type InteractiveProps = {
 export const INTERACTIVE: Record<string, ComponentType<InteractiveProps>> = {
   PatternGraph,
   SmellMap,
+  HashMapBuckets,
+  DecoratorChain,
 }

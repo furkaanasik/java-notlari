@@ -200,6 +200,8 @@ Kalıtımla bunu yapmak imkânsızdır — sınıf seçimi derleme zamanında sa
 
 ### Sıra önemlidir
 
+<!-- component:DecoratorChain -->
+
 ```java
 // Önce sıkıştır, sonra şifrele → küçük ve güvenli
 new EncryptionDecorator(new CompressionDecorator(source));

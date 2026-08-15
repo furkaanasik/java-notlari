@@ -623,3 +623,325 @@
   font-size: 0.6875rem;
   color: var(--c-text-faint);
 }
+
+/* ---------------- HashMap bucket dağılımı ---------------- */
+
+.markdown .hmap,
+.markdown .dchain {
+  margin-block: var(--space-block);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-code);
+  background: var(--c-bg-panel);
+  overflow: hidden;
+}
+
+@media (min-width: 1180px) {
+  .markdown .hmap,
+  .markdown .dchain {
+    width: calc(100% + 2 * var(--compare-bleed));
+    margin-inline: calc(-1 * var(--compare-bleed));
+  }
+}
+
+.hmap__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.hmap__input {
+  width: 14rem;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.8125rem;
+  color: var(--c-text-strong);
+  background: var(--c-bg-content);
+  border: 1px solid var(--c-border);
+  border-radius: 5px;
+  outline: none;
+}
+
+.hmap__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  color: var(--c-text-muted);
+}
+
+.hmap__cap select {
+  margin-left: 0.35rem;
+  padding: 0.2rem 0.3rem;
+  color: var(--c-text-strong);
+  background: var(--c-bg-content);
+  border: 1px solid var(--c-border);
+  border-radius: 5px;
+}
+
+.hmap__reset {
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--c-border);
+  border-radius: 5px;
+  color: var(--c-text-muted);
+}
+
+.hmap__reset:hover {
+  background: var(--c-bg-hover);
+  color: var(--c-text-strong);
+}
+
+.hmap__formula {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--c-border);
+  background: var(--c-bg-quote);
+}
+
+.markdown .hmap__formula code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: none;
+  color: var(--c-text-muted);
+  padding: 0;
+  white-space: nowrap;
+}
+
+.markdown .hmap__formula code strong {
+  color: var(--c-accent-strong);
+}
+
+.hmap__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 1px;
+  background: var(--c-border-soft);
+  padding: 1px;
+}
+
+.hmap__bucket {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  min-height: 2.1rem;
+  padding: 0.3rem 0.45rem;
+  background: var(--c-bg-content);
+}
+
+.hmap__bucket[data-filled='false'] {
+  opacity: 0.45;
+}
+
+.hmap__bucket[data-collision='true'] {
+  background: color-mix(in oklch, var(--edge-confused) 12%, var(--c-bg-content));
+}
+
+.hmap__index {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--c-text-faint);
+  min-width: 1.2rem;
+}
+
+.hmap__entries {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.hmap__entry {
+  font-size: 0.75rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  color: var(--c-text-strong);
+  background: var(--c-bg-hover);
+}
+
+.hmap__entry[data-on='true'] {
+  background: var(--c-accent-quiet);
+  color: var(--c-accent-strong);
+}
+
+.hmap__link {
+  color: var(--c-text-faint);
+  margin-right: 0.2rem;
+}
+
+.hmap__foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0.55rem 0.85rem;
+  border-top: 1px solid var(--c-border);
+  font-size: 0.75rem;
+  color: var(--c-text-muted);
+}
+
+.hmap__note {
+  color: var(--c-text-faint);
+}
+
+/* ---------------- Decorator zinciri ---------------- */
+
+.dchain__cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+}
+
+.dchain__layers {
+  padding: 0.85rem;
+}
+
+.dchain__flow {
+  padding: 0.85rem;
+  border-left: 1px solid var(--c-border);
+}
+
+.markdown .dchain__title {
+  margin: 0 0 0.6rem;
+  font-size: var(--text-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-muted);
+}
+
+.markdown .dchain__list,
+.markdown .dchain__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.markdown .dchain__list > li,
+.markdown .dchain__steps > li {
+  margin: 0 0 0.35rem;
+  padding: 0;
+}
+
+.dchain__layer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  background: var(--c-bg-content);
+  font-size: 0.8125rem;
+}
+
+.dchain__layer[data-off='true'] {
+  opacity: 0.45;
+}
+
+.dchain__layer--base {
+  border-style: dashed;
+  color: var(--c-text-muted);
+  justify-content: flex-start;
+}
+
+.dchain__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+}
+
+.dchain__move button {
+  padding: 0 0.3rem;
+  color: var(--c-text-faint);
+}
+
+.dchain__move button:hover:not(:disabled) {
+  color: var(--c-text-strong);
+}
+
+.dchain__move button:disabled {
+  opacity: 0.3;
+}
+
+.markdown .dchain__code {
+  margin: 0.75rem 0 0;
+  padding: 0.6rem 0.7rem;
+  background: var(--c-bg-code);
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.markdown .dchain__code code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--c-code-text);
+  background: none;
+  white-space: pre;
+}
+
+.dchain__step-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+.dchain__step-name {
+  color: var(--c-text-strong);
+  font-weight: 550;
+}
+
+.dchain__step-bytes {
+  color: var(--c-accent-strong);
+  font-family: var(--font-mono);
+}
+
+.markdown .dchain__step-out {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--c-text-muted);
+  background: var(--c-bg-code);
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+  margin-top: 0.15rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.markdown .dchain__step-note {
+  margin: 0.15rem 0 0;
+  font-size: 0.6875rem;
+  color: var(--c-text-faint);
+}
+
+.markdown .dchain__verdict {
+  margin: 0.75rem 0 0;
+  padding: 0.5rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  background: var(--c-bg-quote);
+  color: var(--c-text-muted);
+  border-left: 3px solid var(--cat-behavioral);
+}
+
+.markdown .dchain__verdict[data-warn='true'] {
+  border-left-color: var(--edge-confused);
+  color: var(--c-text-strong);
+}
+
+@media (max-width: 900px) {
+  .dchain__cols {
+    grid-template-columns: 1fr;
+  }
+
+  .dchain__flow {
+    border-left: none;
+    border-top: 1px solid var(--c-border);
+  }
+}

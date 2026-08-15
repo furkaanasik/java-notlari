@@ -281,6 +281,8 @@ map = @2001    ────────►  HashMap (@2001)
                               Bucket[9]: Node{"Veli"→30}
 ```
 
+<!-- component:HashMapBuckets -->
+
 ### Hash Collision
 
 İki farklı key aynı bucket'a düşerse **collision** olur:
