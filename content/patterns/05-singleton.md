@@ -292,8 +292,4 @@ Bu pattern, prensipleri **uygulamaktan çok ihlal ettiği için** öğreticidir:
 - **Encapsulation** — `private` constructor doğru bir araçtır; sorun erişimin
   global olmasıdır, kurulumun gizlenmesi değil
 
----
-
-## Özet
-
 > Singleton çözdüğü problemden daha fazlasını yaratır. İhtiyaç gerçekse cevap dependency injection'dır; DI yoksa cevap `enum`'dur. `private static instance` yazmadan önce iki kere düşün.

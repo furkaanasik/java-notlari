@@ -261,8 +261,4 @@ Record compact constructor doğrulamayı zaten veriyor. Builder'ı **alan sayıs
 - **PoLA** — isimli adımlar sayesinde çağrı noktası kendini açıklar; `true, false`
   gibi anlamsız argümanlar kalmaz
 
----
-
-## Özet
-
 > Constructor parametre sayısı arttıkça okunabilirlik ve geçerlilik garantisi düşer. Builder ikisini de geri alır — ama sadece gerçekten karmaşıksa.

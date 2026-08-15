@@ -208,8 +208,4 @@ JDBC örneği en öğreticisi: `Connection`'ı GoF diyagramı olarak düşünmem
   geliştiricinin dikkatine bırakılmaz
 - **Test edilebilirlik** — tek bir sahte fabrika, tüm akışı I/O'suz test etmeye yeter
 
----
-
-## Özet
-
 > "Bu üç nesne birbirine uymak zorunda" kuralını yoruma bırakma; tek bir fabrikanın arkasına koy.

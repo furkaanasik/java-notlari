@@ -11,7 +11,13 @@ commit'lerin kapsamı dışındadır.
 
 | Değişiklik | Neden |
 |---|---|
-| `content/DesignPaterns/` → `content/patterns/` | Klasör adında yazım hatası vardı; URL'lere kalıcılaşmadan düzeltildi (`git mv` ile, geçmiş korunarak) |
+| `content/DesignPaterns/` → `content/patterns/` | Klasör adında yazım hatası vardı; URL'lere kalıcılaşmadan düzeltildi |
+
+> Not: Proje bu çalışmadan önce git deposu **değildi**. Geri dönüş noktası
+> oluşturmak için `git init` yapıldı ve düzeltmelerden **önceki** hâl
+> `29d85c5 chore: initial import` commit'ine alındı. Yeniden adlandırma o
+> commit'ten sonra `git mv` ile yapıldığı için takip edilebilir durumda, ancak
+> devralınan bir geçmiş yok — depo bu iki commit'ten ibaret.
 
 ---
 

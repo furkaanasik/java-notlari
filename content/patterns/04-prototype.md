@@ -70,7 +70,7 @@ classDiagram
         +copy() ScheduledReportTemplate
     }
     class PrototypeRegistry {
-        -prototypes: Map
+        -prototypes: Map~String,Prototype~
         +register(key, prototype)
         +get(key) Prototype
     }
@@ -242,9 +242,5 @@ ReportTemplate copy = mapper.readValue(mapper.writeValueAsString(original), Repo
   yeterlidir (Bkz. PRINCIPLES.md — Immutability)
 - **LSP** — `copy()` gerçek çalışma zamanı tipini döndürmelidir; üst tipe düşen
   bir kopya sözleşmeyi bozar
-
----
-
-## Özet
 
 > Kopyalamayı nesnenin kendisine yaptır — çünkü private alanlarını ve gerçek sınıfını bir tek o bilir. Ve her zaman sor: shallow mu yeter, deep mi lazım?

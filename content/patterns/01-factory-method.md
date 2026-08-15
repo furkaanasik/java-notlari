@@ -219,8 +219,4 @@ PaymentResult result = payment.process(request.getAmount());
 - **Test edilebilirlik** — testte sahte bir factory verilerek gerçek ödeme
   sağlayıcısına hiç gidilmez (Bkz. TESTING.md — Mock ne zaman tasarım kokusudur)
 
----
-
-## Özet
-
 > Somut sınıf adını kodundan sil, yerine bir soru koy: "bana bunun uygun olanını ver."

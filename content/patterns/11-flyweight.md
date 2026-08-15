@@ -61,7 +61,7 @@ değiştirirse hepsi etkilenir. (Bkz. PRINCIPLES.md — Immutability)
 ```mermaid
 classDiagram
     class FlyweightFactory {
-        -cache: Map
+        -cache: Map~Key,Flyweight~
         +getFlyweight(key) Flyweight
     }
     class Flyweight {
