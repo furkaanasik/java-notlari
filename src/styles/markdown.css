@@ -1,0 +1,248 @@
+/**
+ * Markdown gövde stilleri.
+ * @tailwindcss/typography (`prose`) taban alınır, tüm ölçü ve renkler
+ * tokens.css'ten gelen değişkenlerle ezilir.
+ */
+
+.markdown {
+  max-width: var(--measure);
+  font-size: var(--text-body);
+  line-height: var(--text-body-lh);
+  color: var(--c-text);
+}
+
+/* ---------- Başlıklar ---------- */
+
+.markdown :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--c-text-strong);
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+}
+
+.markdown h1 {
+  font-size: var(--text-h1);
+  font-weight: var(--weight-h1);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-block: 0 var(--space-h1-after);
+}
+
+/* h2 üstünde ince ayırıcı çizgi */
+.markdown h2 {
+  font-size: var(--text-h2);
+  font-weight: var(--weight-h2);
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  margin-block: var(--space-h2-before) var(--space-h2-after);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--c-border-soft);
+}
+
+.markdown h3 {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-h3);
+  line-height: 1.4;
+  margin-block: var(--space-h3-before) var(--space-h3-after);
+}
+
+.markdown h4 {
+  font-size: var(--text-h4);
+  font-weight: var(--weight-h4);
+  text-transform: none;
+  margin-block: var(--space-h4-before) var(--space-h4-after);
+}
+
+/* Dosyanın ilk başlığı üstten boşluk almasın */
+.markdown > :first-child {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+}
+
+/* Metinde zaten `---` varsa h2'nin kendi çizgisini çizme — çift çizgi oluşuyordu */
+.markdown hr + h2 {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+/* ---------- Metin ---------- */
+
+.markdown p {
+  margin-block: 0 var(--space-p);
+}
+
+.markdown strong {
+  color: var(--c-text-strong);
+  font-weight: 600;
+}
+
+.markdown a {
+  color: var(--c-accent-strong);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in oklch, var(--c-accent) 40%, transparent);
+}
+
+.markdown a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ---------- Listeler ---------- */
+
+.markdown :is(ul, ol) {
+  margin-block: 0 var(--space-p);
+  padding-inline-start: 1.5rem;
+}
+
+.markdown li {
+  margin-block: 0.375rem;
+  padding-inline-start: 0.25rem;
+}
+
+.markdown li::marker {
+  color: var(--c-accent);
+  font-weight: 600;
+}
+
+.markdown :is(li > ul, li > ol) {
+  margin-block: 0.375rem 0;
+}
+
+.markdown li > p {
+  margin-block: 0 0.5rem;
+}
+
+/* ---------- Inline kod ---------- */
+
+.markdown :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: var(--code-scale);
+  background: var(--c-bg-inline);
+  color: var(--c-accent-strong);
+  padding: 0.15em 0.36em;
+  border-radius: var(--radius-inline);
+  white-space: nowrap;
+}
+
+/* react-markdown tırnak eklemez ama typography plugin'i ekler — kapat */
+.markdown :not(pre) > code::before,
+.markdown :not(pre) > code::after {
+  content: none;
+}
+
+/* ---------- Kod blokları ---------- */
+
+.markdown .code-block {
+  margin-block: var(--space-block);
+  background: var(--c-bg-code);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-code);
+  overflow: hidden;
+}
+
+.markdown .code-block__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.5rem 0.4rem 0.85rem;
+  border-bottom: 1px solid oklch(1 0 0 / 0.07);
+}
+
+.markdown .code-block__lang {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: oklch(0.68 0.005 286);
+}
+
+.markdown .code-block pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  background: transparent;
+}
+
+.markdown .code-block code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--c-code-text);
+  background: none;
+  padding: 0;
+  white-space: pre;
+}
+
+/* ---------- Tablolar ---------- */
+
+.markdown .table-wrap {
+  margin-block: var(--space-block);
+  overflow-x: auto;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-code);
+  max-height: 32rem;
+}
+
+.markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.markdown thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--c-bg-table-head);
+  color: var(--c-text-strong);
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+  box-shadow: inset 0 -1px 0 var(--c-border);
+}
+
+.markdown :is(th, td) {
+  padding: 0.625rem 0.875rem;
+  border-inline-end: 1px solid var(--c-border-soft);
+  vertical-align: top;
+}
+
+.markdown :is(th, td):last-child {
+  border-inline-end: none;
+}
+
+.markdown tbody tr {
+  border-top: 1px solid var(--c-border-soft);
+}
+
+/* ---------- Blockquote ---------- */
+
+.markdown blockquote {
+  margin-block: var(--space-block);
+  padding: 0.875rem 1.125rem;
+  border-inline-start: 3px solid var(--c-accent);
+  border-radius: 0 var(--radius-inline) var(--radius-inline) 0;
+  background: var(--c-bg-quote);
+  color: var(--c-text);
+  font-style: normal;
+}
+
+.markdown blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Ayırıcı ---------- */
+
+.markdown hr {
+  margin-block: var(--space-hr);
+  border: none;
+  border-top: 1px solid var(--c-border);
+}
+
+/* ---------- Mermaid / görseller ---------- */
+
+.markdown img {
+  max-width: 100%;
+  height: auto;
+}

@@ -91,6 +91,28 @@ export function extractHeadings(source: string): Heading[] {
   return headings
 }
 
+/**
+ * Dosyaların başındaki elle yazılmış "## İçindekiler" bloğunu gövdeden çıkarır.
+ * Blok md dosyalarında KALIR (GitHub'da ve offline okunurken gerekli), sadece
+ * önyüzde gizlenir — çünkü sağ paneldeki otomatik içindekilerle çakışıyor.
+ *
+ * Blok, başlıktan bir sonraki başlığa kadar (araya giren `---` dahil) atılır.
+ */
+export function stripManualToc(source: string): string {
+  const lines = source.split('\n')
+  const start = lines.findIndex((line) => /^#{1,3}\s+İçindekiler\s*$/.test(line))
+  if (start === -1) return source
+
+  let end = start + 1
+  while (end < lines.length && !/^#{1,6}\s+/.test(lines[end])) end++
+
+  // Bloktan hemen önceki yatay çizgiyi de yut, boşlukta asılı kalmasın.
+  let from = start
+  if (from > 0 && /^\s*---\s*$/.test(lines[from - 1])) from--
+
+  return [...lines.slice(0, from), ...lines.slice(end)].join('\n')
+}
+
 function buildDocs(): Doc[] {
   const docs = Object.entries(RAW).map(([path, source]) => {
     // "/content/patterns/03-builder.md" → "patterns/03-builder"

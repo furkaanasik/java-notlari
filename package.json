@@ -11,11 +11,13 @@
   "keywords": [],
   "type": "module",
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.0.5",
     "jsdom": "^30.0.1",
+    "playwright": "^1.62.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.2.1",

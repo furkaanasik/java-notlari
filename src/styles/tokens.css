@@ -1,0 +1,98 @@
+/**
+ * TASARIM TOKENLARI — tek yönetim noktası.
+ *
+ * Buradaki değerler dışında hiçbir yerde ham ölçü/renk yazılmaz.
+ * Dark mode ÖNCE tanımlanır (:root = dark), light onun türevidir.
+ */
+
+:root {
+  /* ---- Tipografi ölçekleri ---- */
+  --text-body: 1rem; /* 16px */
+  --text-body-lh: 1.75;
+  --text-small: 0.875rem; /* 14px  — sidebar öğeleri */
+  --text-toc: 0.8125rem; /* 13px  — sağ panel */
+  --text-label: 0.6875rem; /* 11px  — kategori başlıkları */
+
+  --text-h1: 2.25rem;
+  --text-h2: 1.5rem;
+  --text-h3: 1.1875rem;
+  --text-h4: 1rem;
+
+  --weight-h1: 700;
+  --weight-h2: 650;
+  --weight-h3: 600;
+  --weight-h4: 600;
+
+  --code-scale: 0.9em;
+
+  /* ---- Dikey ritim ----
+     Kural: başlık ÖNCESİ boşluk, sonrasının en az 2 katı. */
+  --space-p: 1.25rem; /* paragraf arası */
+  --space-h1-after: 1rem;
+  --space-h2-before: 3.5rem;
+  --space-h2-after: 1rem;
+  --space-h3-before: 2.25rem;
+  --space-h3-after: 0.75rem;
+  --space-h4-before: 1.75rem;
+  --space-h4-after: 0.5rem;
+  --space-block: 1.5rem; /* kod bloğu, tablo, blockquote çevresi */
+  --space-hr: 3rem;
+
+  /* ---- Ölçüler ---- */
+  --measure: 68ch; /* gövde satır genişliği */
+  --sidebar-w: 260px;
+  --toc-w: 240px;
+  --header-h: 3.25rem;
+  --content-px: 3rem;
+  --content-px-sm: 1.25rem;
+  --radius-code: 8px;
+  --radius-inline: 3px;
+  --item-h: 2.25rem; /* sidebar satır yüksekliği */
+
+  /* ---- Renk: DARK (temel) ----
+     Nötr skala zinc, tek vurgu rengi amber. */
+  --c-accent: oklch(0.79 0.15 78); /* amber-400 */
+  --c-accent-strong: oklch(0.85 0.16 82);
+  --c-accent-quiet: oklch(0.79 0.15 78 / 0.12);
+
+  --c-bg-content: oklch(0.19 0.005 286); /* içerik: en açık yüzey */
+  --c-bg-panel: oklch(0.16 0.005 286); /* sidebar + TOC: hafif farklı */
+  --c-bg-code: oklch(0.14 0.006 286); /* kod: her iki temada da koyu */
+  --c-bg-inline: oklch(1 0 0 / 0.07);
+  --c-bg-table-head: oklch(0.22 0.005 286);
+  --c-bg-quote: oklch(1 0 0 / 0.035);
+  --c-bg-hover: oklch(1 0 0 / 0.045);
+
+  --c-border: oklch(0.28 0.006 286);
+  --c-border-soft: oklch(0.25 0.006 286);
+
+  --c-text: oklch(0.87 0.003 286); /* zinc-300 */
+  --c-text-strong: oklch(0.97 0.002 286);
+  --c-text-muted: oklch(0.65 0.006 286); /* zinc-500 */
+  --c-text-faint: oklch(0.55 0.006 286);
+  --c-code-text: oklch(0.9 0.004 286);
+}
+
+/* ---- Renk: LIGHT (dark'ın türevi) ---- */
+.light {
+  --c-accent: oklch(0.62 0.14 62);
+  --c-accent-strong: oklch(0.52 0.14 58);
+  --c-accent-quiet: oklch(0.62 0.14 62 / 0.1);
+
+  --c-bg-content: oklch(1 0 0); /* içerik: beyaz, en açık */
+  --c-bg-panel: oklch(0.985 0.001 286); /* zinc-50 */
+  --c-bg-code: oklch(0.21 0.006 286); /* light'ta da KOYU */
+  --c-bg-inline: oklch(0.55 0.01 286 / 0.1);
+  --c-bg-table-head: oklch(0.97 0.001 286);
+  --c-bg-quote: oklch(0.97 0.001 286);
+  --c-bg-hover: oklch(0.94 0.002 286);
+
+  --c-border: oklch(0.9 0.003 286); /* zinc-200 */
+  --c-border-soft: oklch(0.93 0.003 286);
+
+  --c-text: oklch(0.37 0.008 286); /* zinc-700 */
+  --c-text-strong: oklch(0.21 0.01 286);
+  --c-text-muted: oklch(0.55 0.008 286);
+  --c-text-faint: oklch(0.65 0.008 286);
+  --c-code-text: oklch(0.9 0.004 286);
+}
