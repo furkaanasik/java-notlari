@@ -954,3 +954,187 @@
   font-size: 0.8125rem;
   text-align: center;
 }
+
+/* ---------------- Erişilebilirlik: içeriğe atla ---------------- */
+
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3rem;
+  z-index: 100;
+  padding: 0.5rem 0.85rem;
+  border-radius: 6px;
+  background: var(--c-bg-panel);
+  border: 1px solid var(--c-accent);
+  color: var(--c-text-strong);
+  font-size: 0.8125rem;
+  transition: top 120ms;
+}
+
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+/* ---------------- Mobil gezinme çekmecesi ---------------- */
+
+.drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: oklch(0 0 0 / 0.5);
+}
+
+.drawer__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(300px, 86vw);
+  height: 100%;
+  background: var(--c-bg-panel);
+  border-right: 1px solid var(--c-border);
+}
+
+.drawer__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.drawer__title {
+  font-size: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-muted);
+}
+
+.drawer__bar button {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--c-border);
+  border-radius: 5px;
+  color: var(--c-text-muted);
+}
+
+.drawer__scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.drawer__toc {
+  padding: 0 0.85rem 1.5rem 1.25rem;
+  border-top: 1px solid var(--c-border);
+  padding-top: 1rem;
+}
+
+.drawer__toc-title {
+  margin: 0 0 0.5rem;
+  font-size: var(--text-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-muted);
+}
+
+.drawer__toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.drawer__toc button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.3rem 0;
+  font-size: var(--text-toc);
+  line-height: 1.45;
+  color: var(--c-text-faint);
+}
+
+.drawer__toc button:hover {
+  color: var(--c-accent-strong);
+}
+
+/* ---------------- Tüm seti yazdırma görünümü ---------------- */
+
+.printall {
+  min-height: 100vh;
+  background: var(--c-bg-content);
+}
+
+.printall__bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--c-border);
+  background: var(--c-bg-panel);
+  font-size: 0.8125rem;
+  color: var(--c-text-muted);
+}
+
+.printall__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.printall__bar button {
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--c-border);
+  border-radius: 5px;
+  color: var(--c-text-strong);
+}
+
+.printall__bar button:disabled {
+  opacity: 0.5;
+}
+
+.printall__body {
+  padding: 2rem 1.5rem;
+}
+
+.printall__doc {
+  max-width: var(--measure);
+  margin: 0 auto 3rem;
+}
+
+/* Her dosya yeni sayfadan başlasın */
+@media print {
+  .printall__bar {
+    display: none !important;
+  }
+
+  .printall__body {
+    padding: 0 !important;
+  }
+
+  .printall__doc {
+    max-width: none;
+    margin-bottom: 0;
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .printall__doc:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+}
+
+/* Ekran okuyucuya görünür, göze görünmez */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

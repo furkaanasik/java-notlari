@@ -6,11 +6,22 @@ type Props = {
   theme: Theme
   onToggleTheme: () => void
   onOpenSearch: () => void
+  onOpenMenu: () => void
+  onPrintAll: () => void
   /** 0-1 arası okuma ilerlemesi */
   progress: number
 }
 
-export function Header({ title, category, theme, onToggleTheme, onOpenSearch, progress }: Props) {
+export function Header({
+  title,
+  category,
+  theme,
+  onToggleTheme,
+  onOpenSearch,
+  onOpenMenu,
+  onPrintAll,
+  progress,
+}: Props) {
   return (
     <header
       className="sticky top-0 z-30 flex items-center justify-between border-b px-5 relative"
@@ -32,6 +43,17 @@ export function Header({ title, category, theme, onToggleTheme, onOpenSearch, pr
       />
 
       <div className="flex min-w-0 items-center gap-2">
+        {/* Dar ekranda tek gezinme yolu — masaüstünde paneller zaten açık */}
+        <button
+          type="button"
+          onClick={onOpenMenu}
+          aria-label="Gezinme menüsünü aç"
+          className="mr-1 flex h-8 w-8 items-center justify-center rounded-md border md:hidden"
+          style={{ borderColor: 'var(--c-border)', color: 'var(--c-text-muted)' }}
+        >
+          <MenuIcon />
+        </button>
+
         {category && (
           <>
             <span
@@ -68,6 +90,17 @@ export function Header({ title, category, theme, onToggleTheme, onOpenSearch, pr
 
         <button
           type="button"
+          onClick={onPrintAll}
+          aria-label="Tüm seti yazdır"
+          title="Tüm seti yazdır"
+          className="hidden h-8 w-8 items-center justify-center rounded-md border sm:flex"
+          style={{ borderColor: 'var(--c-border)', color: 'var(--c-text-muted)' }}
+        >
+          <PrintIcon />
+        </button>
+
+        <button
+          type="button"
           onClick={onToggleTheme}
           aria-label={theme === 'dark' ? 'Açık temaya geç' : 'Koyu temaya geç'}
           className="flex h-8 w-8 items-center justify-center rounded-md border transition-colors"
@@ -77,6 +110,22 @@ export function Header({ title, category, theme, onToggleTheme, onOpenSearch, pr
         </button>
       </div>
     </header>
+  )
+}
+
+function MenuIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <path d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  )
+}
+
+function PrintIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z" />
+    </svg>
   )
 }
 

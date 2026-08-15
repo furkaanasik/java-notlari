@@ -143,8 +143,13 @@ export function SmellMap() {
 function Column({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="smap__col">
-      <h3 className="smap__col-title">{title}</h3>
-      <ul className="smap__list">{children}</ul>
+      {/* Başlık seviyesi atlamasın diye <p>: bileşen h1 altına da gömülebiliyor */}
+      <p className="smap__col-title" id={`smap-${title}`}>
+        {title}
+      </p>
+      <ul className="smap__list" aria-labelledby={`smap-${title}`}>
+        {children}
+      </ul>
     </div>
   )
 }

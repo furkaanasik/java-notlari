@@ -44,13 +44,26 @@ export function HighlightedCode({ code, language }: { code: string; language: st
     }
   }, [code, language])
 
+  /*
+   * Yatay kaydırılabilir bölge klavyeyle de gezilebilmeli.
+   * role="region" KULLANILMIYOR: her kod bloğu ayrı bir landmark üretip
+   * "landmark-unique" ihlaline yol açıyordu. tabIndex erişim için yeterli.
+   */
+  const scrollProps = { tabIndex: 0 } as const
+
   if (html) {
-    return <div className="code-block__body" dangerouslySetInnerHTML={{ __html: html }} />
+    return (
+      <div
+        className="code-block__body"
+        {...scrollProps}
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    )
   }
 
   const marks = markLines(code)
   return (
-    <div className="code-block__body">
+    <div className="code-block__body" {...scrollProps}>
       <pre>
         <code>
           {code.split('\n').map((line, index) => {

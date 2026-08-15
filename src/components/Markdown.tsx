@@ -112,9 +112,24 @@ export function Markdown({ source, theme, onNavigate }: Props) {
           return <a {...(rest as ComponentPropsWithoutRef<'a'>)}>{children}</a>
         },
 
+        // Bazı tablolarda ilk başlık hücresi kasıtlı olarak boş; ekran
+        // okuyucu için görünmez bir etiket konur.
+        th({ children, ...rest }: ComponentPropsWithoutRef<'th'>) {
+          const empty =
+            children === undefined ||
+            children === null ||
+            (typeof children === 'string' && children.trim() === '')
+
+          return (
+            <th {...rest}>
+              {empty ? <span className="sr-only">Satır başlığı</span> : children}
+            </th>
+          )
+        },
+
         table({ children, ...rest }: ComponentPropsWithoutRef<'table'>) {
           return (
-            <div className="table-wrap">
+            <div className="table-wrap" tabIndex={0}>
               <table {...rest}>{children}</table>
             </div>
           )

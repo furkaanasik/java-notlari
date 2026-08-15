@@ -163,6 +163,14 @@ src/
 
 ---
 
+## Mobil
+
+Dar ekranda soldaki dosya listesi ve sağdaki içindekiler gizlenir; başlıktaki
+menü düğmesi ikisini birden bir çekmecede açar. Çekmece `Esc` ile kapanır, odak
+içinde döner ve dosya seçilince kendiliğinden kapanır.
+
+---
+
 ## Klavye
 
 | Tuş | Ne yapar |
@@ -186,7 +194,12 @@ Bir dosyanın sonuna gelindiğinde sidebar'da ✓ ile işaretlenir; işaretler
 
 ## Yazdırma
 
-`Cmd/Ctrl+P` doğrudan çalışır: paneller, başlık çubuğu ve butonlar kâğıda
+`Cmd/Ctrl+P` açık dosyayı yazdırır. Başlıktaki yazıcı düğmesi **tüm seti** tek
+akışta hazırlar (17 dosya, her biri yeni sayfadan başlar). Yazdırma otomatik
+tetiklenmez: vurgulama ve diyagramlar asenkron yüklendiği için erken bir
+`print()` yarım içerik basardı — hazır olunca düğme etkinleşir.
+
+Her iki durumda da: paneller, başlık çubuğu ve butonlar kâğıda
 basılmaz, koyu tema beyaza döner, kod ve tablolar kaydırma yerine sarar,
 başlıklar sayfa sonunda yalnız bırakılmaz. Dış bağlantıların adresi metne eklenir.
 
@@ -206,6 +219,25 @@ Ağır kütüphaneler ayrı parçalara bölündü ve ihtiyaç anında indiriliyo
 | `mermaid` | Diyagram içeren bir dosya açıldığında |
 | `flexsearch` + arama indeksi | Palet ilk kez açıldığında |
 | İnteraktif bileşenler | Yalnızca onları içeren doküman açıldığında |
+
+---
+
+## Erişilebilirlik
+
+`axe-core` ile ölçüldü: koyu ve açık temada, üç farklı doküman ve mobil çekmece
+dahil **0 ihlal**. Denetim şunları yakaladı ve düzeltildi:
+
+- Açık temada soluk metin 3.2:1, koyu temada 3.8:1 kontrastla AA'yı geçemiyordu;
+  token'lar koyulaştırıldı/açıldı.
+- Yatay kaydırılan kod blokları ve tablolar klavyeyle gezilemiyordu (`tabIndex`).
+- Panellerin erişilebilir adı yoktu; kod bloklarına `role="region"` vermek ise
+  her blok için ayrı landmark üretip yeni bir ihlale yol açtı — sadece odak
+  bırakıldı.
+- Markdown'daki boş tablo başlık hücrelerine görünmez etiket eklendi.
+- "İçeriğe atla" bağlantısı ve `aria-current` işaretleri eklendi.
+
+Ölçümü tekrarlamak için `scripts/` altında ayrı bir komut yok; denetim
+`axe-core` devDependency'si ile elle çalıştırıldı.
 
 ---
 

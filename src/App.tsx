@@ -7,6 +7,8 @@ import { Sidebar } from './components/Sidebar'
 import { Toc } from './components/Toc'
 import { Header } from './components/Header'
 import { SearchPalette } from './components/SearchPalette'
+import { MobileDrawer } from './components/MobileDrawer'
+import { PrintAll } from './components/PrintAll'
 import { useTheme } from './hooks/useTheme'
 import { useReadingProgress } from './hooks/useReadingProgress'
 import { useKeyboardNav } from './hooks/useKeyboardNav'
@@ -15,6 +17,8 @@ export default function App() {
   const { theme, toggle } = useTheme()
   const [params, setParams] = useSearchParams()
   const [paletteOpen, setPaletteOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [printAll, setPrintAll] = useState(false)
   // Bekleyen çapa state DEĞİL ref: state olsaydı temizlenmesi yeni bir render
   // tetikleyip effect'i ikinci kez çalıştırır ve sayfayı hemen başa döndürürdü.
   const pendingAnchor = useRef<string | null>(null)
@@ -66,7 +70,7 @@ export default function App() {
     scrollRef: mainRef,
     onNextDoc: () => goRelative(1),
     onPrevDoc: () => goRelative(-1),
-    disabled: paletteOpen,
+    disabled: paletteOpen || menuOpen || printAll,
   })
 
   /**
@@ -102,9 +106,15 @@ export default function App() {
     [openDoc],
   )
 
+  if (printAll) return <PrintAll theme={theme} onExit={() => setPrintAll(false)} />
+
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: 'var(--c-bg-content)' }}>
+      <a href="#icerik" className="skip-link">
+        İçeriğe atla
+      </a>
       <aside
+        aria-label="Dosya listesi"
         className="hidden shrink-0 overflow-y-auto border-r md:block"
         style={{
           width: 'var(--sidebar-w)',
@@ -122,11 +132,13 @@ export default function App() {
           theme={theme}
           onToggleTheme={toggle}
           onOpenSearch={() => setPaletteOpen(true)}
+          onOpenMenu={() => setMenuOpen(true)}
+          onPrintAll={() => setPrintAll(true)}
           progress={progress}
         />
 
         <div className="flex min-h-0 flex-1">
-          <main ref={mainRef} className="min-w-0 flex-1 overflow-y-auto">
+          <main id="icerik" ref={mainRef} className="min-w-0 flex-1 overflow-y-auto">
             <div className="content-pad mx-auto py-12">
               {doc ? (
                 <article className="markdown">
@@ -139,6 +151,7 @@ export default function App() {
           </main>
 
           <aside
+            aria-label="Sayfa içindekiler"
             className="hidden shrink-0 overflow-y-auto border-l lg:block"
             style={{
               width: 'var(--toc-w)',
@@ -150,6 +163,16 @@ export default function App() {
           </aside>
         </div>
       </div>
+
+      <MobileDrawer
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        activeSlug={activeSlug}
+        onSelect={openDoc}
+        read={read}
+        headings={headings}
+        onSelectHeading={(id) => openDoc(activeSlug, id)}
+      />
 
       <SearchPalette
         open={paletteOpen}

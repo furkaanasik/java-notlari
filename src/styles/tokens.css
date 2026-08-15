@@ -69,8 +69,9 @@
 
   --c-text: oklch(0.87 0.003 286); /* zinc-300 */
   --c-text-strong: oklch(0.97 0.002 286);
-  --c-text-muted: oklch(0.65 0.006 286); /* zinc-500 */
-  --c-text-faint: oklch(0.55 0.006 286);
+  --c-text-muted: oklch(0.7 0.006 286);
+  /* Koyu zeminde AA için açıldı — 0.55 değeri 3.8:1 ile başarısızdı. */
+  --c-text-faint: oklch(0.63 0.006 286);
   --c-code-text: oklch(0.9 0.004 286);
 
   /* ---- Graf renkleri ----
@@ -103,7 +104,9 @@
 
   --c-text: oklch(0.37 0.008 286); /* zinc-700 */
   --c-text-strong: oklch(0.21 0.01 286);
-  --c-text-muted: oklch(0.55 0.008 286);
-  --c-text-faint: oklch(0.65 0.008 286);
+  /* Beyaz zeminde WCAG AA (4.5:1) için koyulaştırıldı — axe denetimi
+     0.55/0.65 değerlerini 3.2:1 ile başarısız buldu. */
+  --c-text-muted: oklch(0.5 0.008 286);
+  --c-text-faint: oklch(0.55 0.008 286);
   --c-code-text: oklch(0.9 0.004 286);
 }
