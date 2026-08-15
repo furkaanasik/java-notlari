@@ -22,6 +22,7 @@ npm run dev        # http://localhost:5173
 | `npm run check:mermaid` | `content/` içindeki tüm mermaid bloklarını ayrıştırır |
 | `npm run check:render` | Çalışan bir sunucuya karşı gerçek tarayıcıda render doğrular |
 | `npm run shots` | Her iki temada ekran görüntüsü alır, konsol hatasında başarısız olur |
+| `npm run verify` | Derler, çıktıyı servis eder, tarayıcıda render'ı doğrular |
 
 Arama dizini ve interaktif bileşenler markdown'dan türetilir; `content/` değişince
 yeniden derlemek yeterlidir.
@@ -219,6 +220,36 @@ Ağır kütüphaneler ayrı parçalara bölündü ve ihtiyaç anında indiriliyo
 | `mermaid` | Diyagram içeren bir dosya açıldığında |
 | `flexsearch` + arama indeksi | Palet ilk kez açıldığında |
 | İnteraktif bileşenler | Yalnızca onları içeren doküman açıldığında |
+
+---
+
+## Yayınlama
+
+Çıktı tamamen statiktir: `dist/` klasörünü herhangi bir yere koymak yeterli.
+Sunucu tarafında yönlendirme kuralı **gerekmez** — açık dosya yol yerine
+`?doc=` sorgu parametresinde tutulduğu için her istek `index.html`'e düşer.
+
+```bash
+npm run build
+# dist/ → herhangi bir statik sunucu
+```
+
+Yollar göreli (`base: './'`), bu yüzden alt dizinden de çalışır:
+`https://site.com/java-docs/` gibi. Doğrulandı: derin bağlantılar, yenileme,
+tembel yüklenen parçalar ve interaktif bileşenler alt dizinde de sorunsuz.
+
+### GitHub Pages
+
+`.github/workflows/deploy.yml` hazır. Depoda **Settings → Pages → Source**'u
+*GitHub Actions* yap; sonrası otomatik:
+
+1. `npm ci`
+2. `npm run verify` — mermaid sözdizimi, tip kontrolü, derleme ve gerçek
+   tarayıcıda diyagram render doğrulaması
+3. Yalnızca ana dala push'ta ve doğrulama geçtiyse yayın
+
+Pull request'lerde yayın yapılmaz, sadece doğrulama çalışır. Bozuk bir
+diyagram veya tip hatası yayını durdurur.
 
 ---
 
