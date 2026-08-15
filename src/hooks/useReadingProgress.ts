@@ -41,11 +41,20 @@ export function useReadingProgress(scrollRef: RefObject<HTMLElement | null>, slu
     const element = scrollRef.current
     if (!element) return
 
+    // Her scroll olayında state güncellemek gereksiz render üretir; yalnızca
+    // yüzde tam sayı olarak değiştiğinde güncelle.
+    let lastPercent = -1
+
     const onScroll = () => {
       const scrollable = element.scrollHeight - element.clientHeight
       // Kısa dosyalarda kaydırılacak yer yok — açıldığı an okunmuş sayılır.
       const ratio = scrollable <= 8 ? 1 : Math.min(1, element.scrollTop / scrollable)
-      setProgress(ratio)
+      const percent = Math.round(ratio * 100)
+
+      if (percent !== lastPercent) {
+        lastPercent = percent
+        setProgress(percent / 100)
+      }
       if (ratio > 0.98) markRead(slug)
     }
 

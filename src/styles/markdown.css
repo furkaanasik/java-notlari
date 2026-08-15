@@ -564,3 +564,26 @@
   border-bottom-style: solid;
   background: var(--c-accent-quiet);
 }
+
+/*
+ * Vurgulama asenkron geldiği için kod önce düz metin olarak çizilir.
+ * Geçiş kısa bir sönümlemeyle yapılır; aksi hâlde bloklar tek tek "pop"
+ * ederek yanıp sönüyormuş izlenimi veriyordu.
+ */
+.markdown .code-block__body {
+  transition: opacity 140ms ease-out;
+}
+
+.markdown .code-block__body[data-state='plain'] {
+  opacity: 0.72;
+}
+
+.markdown .code-block__body[data-state='ready'] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markdown .code-block__body {
+    transition: none;
+  }
+}

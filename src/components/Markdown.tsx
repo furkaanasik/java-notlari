@@ -1,4 +1,12 @@
-import { Suspense, isValidElement, type ComponentPropsWithoutRef, type ReactNode } from 'react'
+import {
+  Suspense,
+  isValidElement,
+  memo,
+  useMemo,
+  useRef,
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+} from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
@@ -48,6 +56,10 @@ export function expandComponentMarkers(source: string): string {
     )
 }
 
+// Sabit referanslar — her render'da yeni dizi vermek de yeniden ayrıştırmaya yol açar.
+const REMARK_PLUGINS = [remarkGfm]
+const REHYPE_PLUGINS = [rehypeSlug, rehypeCrossRefs]
+
 type Props = {
   source: string
   theme: Theme
@@ -55,13 +67,28 @@ type Props = {
   onNavigate?: (slug: string, anchor?: string) => void
 }
 
-export function Markdown({ source, theme, onNavigate }: Props) {
-  return (
-    <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeSlug, rehypeCrossRefs]}
-      components={{
-        pre({ children }: ComponentPropsWithoutRef<'pre'>) {
+/**
+ * DİKKAT: `components` haritası useMemo ile sabitlenir.
+ *
+ * Satır içi nesne olarak verildiğinde her render'da YENİ bileşen tipleri
+ * üretiliyordu; React bunları farklı tipler sayıp tüm kod bloklarını söküp
+ * yeniden kuruyordu. Sonuç: sayfa kaydırılırken vurgulanmış kod bir an düz
+ * metne düşüp geri geliyor, ❌/✅ satır renkleri gidip geliyordu.
+ */
+function MarkdownView({ source, theme, onNavigate }: Props) {
+  /*
+   * `onNavigate` üst bileşende her render'da yeni bir kimlik alabiliyor
+   * (react-router'ın setSearchParams'ı sabit değil). Bağımlılığa koyarsak
+   * `components` yeniden üretilir, React bunları farklı bileşen tipleri sayar
+   * ve TÜM kod bloklarını söker — vurgulanmış kod bir an düz metne düşerdi.
+   * Referansta tutup bağımlılıktan çıkarıyoruz.
+   */
+  const navigateRef = useRef(onNavigate)
+  navigateRef.current = onNavigate
+
+  const components = useMemo(
+    () => ({
+      pre({ children }: ComponentPropsWithoutRef<'pre'>) {
           const { language, code } = readCodeChild(children)
 
           if (language === 'mermaid') return <MermaidDiagram code={code} theme={theme} />
@@ -72,7 +99,7 @@ export function Markdown({ source, theme, onNavigate }: Props) {
             if (Component) {
               return (
                 <Suspense fallback={<p className="interactive-loading">Bileşen yükleniyor…</p>}>
-                  <Component onNavigate={onNavigate} />
+                  <Component onNavigate={(slug: string) => navigateRef.current?.(slug)} />
                 </Suspense>
               )
             }
@@ -93,7 +120,7 @@ export function Markdown({ source, theme, onNavigate }: Props) {
           const targetDoc = rest['data-doc']
           const anchor = rest['data-anchor']
 
-          if (typeof targetDoc === 'string' && onNavigate) {
+          if (typeof targetDoc === 'string' && navigateRef.current) {
             return (
               <a
                 {...(rest as ComponentPropsWithoutRef<'a'>)}
@@ -101,7 +128,7 @@ export function Markdown({ source, theme, onNavigate }: Props) {
                   // Yeni sekmede açma isteğini bozma.
                   if (event.metaKey || event.ctrlKey || event.shiftKey) return
                   event.preventDefault()
-                  onNavigate(targetDoc, typeof anchor === 'string' ? anchor : '')
+                  navigateRef.current?.(targetDoc, typeof anchor === 'string' ? anchor : '')
                 }}
               >
                 {children}
@@ -127,16 +154,27 @@ export function Markdown({ source, theme, onNavigate }: Props) {
           )
         },
 
-        table({ children, ...rest }: ComponentPropsWithoutRef<'table'>) {
-          return (
-            <div className="table-wrap" tabIndex={0}>
-              <table {...rest}>{children}</table>
-            </div>
-          )
-        },
-      }}
+      table({ children, ...rest }: ComponentPropsWithoutRef<'table'>) {
+        return (
+          <div className="table-wrap" tabIndex={0}>
+            <table {...rest}>{children}</table>
+          </div>
+        )
+      },
+    }),
+    [theme],
+  )
+
+  return (
+    <ReactMarkdown
+      remarkPlugins={REMARK_PLUGINS}
+      rehypePlugins={REHYPE_PLUGINS}
+      components={components}
     >
       {source}
     </ReactMarkdown>
   )
 }
+
+/** Aynı kaynak ve tema ile yeniden render edilmesin. */
+export const Markdown = memo(MarkdownView)

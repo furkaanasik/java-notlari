@@ -51,10 +51,15 @@ export function HighlightedCode({ code, language }: { code: string; language: st
    */
   const scrollProps = { tabIndex: 0 } as const
 
+  // Vurgulama hazır olduğunda düz metinden renkliye geçiş ani olmasın:
+  // 26 blok arka arkaya "pop" ederek gözü rahatsız ediyordu.
+  const state = html ? 'ready' : 'plain'
+
   if (html) {
     return (
       <div
         className="code-block__body"
+        data-state={state}
         {...scrollProps}
         dangerouslySetInnerHTML={{ __html: html }}
       />
@@ -63,7 +68,7 @@ export function HighlightedCode({ code, language }: { code: string; language: st
 
   const marks = markLines(code)
   return (
-    <div className="code-block__body" {...scrollProps}>
+    <div className="code-block__body" data-state={state} {...scrollProps}>
       <pre>
         <code>
           {code.split('\n').map((line, index) => {
