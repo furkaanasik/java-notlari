@@ -157,11 +157,29 @@
   color: oklch(0.68 0.005 286);
 }
 
+.markdown .code-block__copy {
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: oklch(0.68 0.005 286);
+  transition: background-color 120ms, color 120ms;
+}
+
+.markdown .code-block__copy:hover {
+  background: oklch(1 0 0 / 0.1);
+  color: oklch(0.95 0.002 286);
+}
+
+.markdown .code-block__body {
+  overflow-x: auto;
+}
+
 .markdown .code-block pre {
   margin: 0;
-  padding: 1rem;
-  overflow-x: auto;
-  background: transparent;
+  padding: 1rem 1rem 1rem 0;
+  background: transparent !important;
+  min-width: max-content;
 }
 
 .markdown .code-block code {
@@ -172,6 +190,161 @@
   background: none;
   padding: 0;
   white-space: pre;
+  counter-reset: line;
+}
+
+/* Satır numarası — shiki her satırı .line olarak sarar */
+.markdown .code-block code .line {
+  display: inline-block;
+  width: 100%;
+}
+
+.markdown .code-block code .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2.5rem;
+  margin-right: 1rem;
+  text-align: right;
+  color: oklch(0.5 0.005 286);
+  user-select: none;
+}
+
+/* Son satır boşsa numara verme */
+.markdown .code-block code .line:last-child:empty::before {
+  content: none;
+}
+
+/* ---------- Mermaid ---------- */
+
+.markdown .mermaid {
+  margin-block: var(--space-block);
+  padding: 0;
+}
+
+.markdown .mermaid__canvas {
+  display: block;
+  width: 100%;
+  padding: 1.5rem 1rem;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-code);
+  background: var(--c-bg-quote);
+  cursor: zoom-in;
+  overflow-x: auto;
+  transition: border-color 120ms;
+}
+
+.markdown .mermaid__canvas:hover {
+  border-color: var(--c-accent);
+}
+
+.markdown .mermaid__canvas svg {
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+  display: block;
+}
+
+.markdown .mermaid__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.375rem;
+}
+
+.markdown .mermaid__actions button {
+  font-size: 0.75rem;
+  color: var(--c-text-faint);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+}
+
+.markdown .mermaid__actions button:hover {
+  color: var(--c-accent-strong);
+  background: var(--c-bg-hover);
+}
+
+.markdown .mermaid-error {
+  margin-block: var(--space-block);
+  border: 1px solid var(--c-accent);
+  border-radius: var(--radius-code);
+  background: var(--c-bg-code);
+  padding: 0.75rem 1rem;
+}
+
+.markdown .mermaid-error__title {
+  font-size: 0.75rem;
+  color: var(--c-accent-strong);
+  margin-bottom: 0.5rem;
+}
+
+.markdown .mermaid-error pre {
+  margin: 0;
+  overflow-x: auto;
+}
+
+.markdown .mermaid-error code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--c-code-text);
+  background: none;
+  white-space: pre;
+}
+
+/* Büyütme modalı */
+.mermaid-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: oklch(0 0 0 / 0.65);
+  backdrop-filter: blur(3px);
+}
+
+.mermaid-modal__panel {
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+  max-width: 92vw;
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  background: var(--c-bg-content);
+  overflow: hidden;
+}
+
+.mermaid-modal__bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.mermaid-modal__bar button {
+  font-size: 0.75rem;
+  color: var(--c-text-muted);
+  padding: 0.25rem 0.6rem;
+  border-radius: 5px;
+  border: 1px solid var(--c-border);
+}
+
+.mermaid-modal__bar button:hover {
+  color: var(--c-text-strong);
+  background: var(--c-bg-hover);
+}
+
+.mermaid-modal__canvas {
+  overflow: auto;
+  padding: 2rem;
+}
+
+/* Modalda diyagram gerçekten büyüsün — mermaid'in doğal boyutu küçük kalıyor */
+.mermaid-modal__canvas svg {
+  width: min(78vw, 1100px);
+  max-width: none;
+  height: auto;
 }
 
 /* ---------- Tablolar ---------- */

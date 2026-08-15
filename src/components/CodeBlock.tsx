@@ -1,14 +1,38 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useState } from 'react'
+import { CODE_THEME, getHighlighter, isSupported } from '../lib/highlighter'
 
 type Props = {
   language: string | null
   code: string
-  children: ReactNode
 }
 
-/** Kod bloğu: dil etiketi + kopyala butonu + yatay kaydırmalı gövde. */
-export function CodeBlock({ language, code, children }: Props) {
+/**
+ * Kod bloğu: dil etiketi, kopyala butonu, satır numarası ve shiki vurgulaması.
+ *
+ * Vurgulama asenkron yüklenir; hazır olana kadar (ve desteklenmeyen dillerde)
+ * düz metin gösterilir — içerik hiçbir durumda kaybolmaz.
+ */
+export function CodeBlock({ language, code }: Props) {
+  const [html, setHtml] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    if (!isSupported(language)) return
+
+    let cancelled = false
+    getHighlighter()
+      .then((highlighter) => {
+        if (cancelled) return
+        setHtml(highlighter.codeToHtml(code, { lang: language, theme: CODE_THEME }))
+      })
+      .catch(() => {
+        // Vurgulama yüklenemezse düz metin kalır.
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [code, language])
 
   async function copy() {
     try {
@@ -16,7 +40,7 @@ export function CodeBlock({ language, code, children }: Props) {
       setCopied(true)
       window.setTimeout(() => setCopied(false), 1600)
     } catch {
-      // Pano izni yoksa sessizce geç — kullanıcı yine de metni seçebilir.
+      // Pano izni yoksa sessizce geç — metin yine seçilebilir.
     }
   }
 
@@ -24,16 +48,27 @@ export function CodeBlock({ language, code, children }: Props) {
     <div className="code-block">
       <div className="code-block__bar">
         <span className="code-block__lang">{language ?? 'kod'}</span>
-        <button
-          type="button"
-          onClick={copy}
-          aria-label={copied ? 'Kopyalandı' : 'Kodu kopyala'}
-          className="rounded px-2 py-1 text-[0.6875rem] font-medium text-zinc-400 transition-colors hover:bg-white/10 hover:text-zinc-100"
-        >
+        <button type="button" onClick={copy} className="code-block__copy">
           {copied ? 'Kopyalandı' : 'Kopyala'}
         </button>
       </div>
-      {children}
+
+      {html ? (
+        <div className="code-block__body" dangerouslySetInnerHTML={{ __html: html }} />
+      ) : (
+        <div className="code-block__body">
+          <pre>
+            <code>
+              {code.split('\n').map((line, index) => (
+                <span key={index} className="line">
+                  {line}
+                  {'\n'}
+                </span>
+              ))}
+            </code>
+          </pre>
+        </div>
+      )}
     </div>
   )
 }

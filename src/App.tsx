@@ -49,7 +49,7 @@ export default function App() {
             <div className="content-pad mx-auto py-12">
               {doc ? (
                 <article className="markdown">
-                  <Markdown source={body} />
+                  <Markdown source={body} theme={theme} />
                 </article>
               ) : (
                 <p>Dosya bulunamadı.</p>

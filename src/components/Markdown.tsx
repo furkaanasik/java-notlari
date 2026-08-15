@@ -3,6 +3,8 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import { CodeBlock } from './CodeBlock'
+import { MermaidDiagram } from './MermaidDiagram'
+import type { Theme } from '../hooks/useTheme'
 
 /** <pre><code class="language-java"> içinden dil adını ve ham metni çıkarır. */
 function readCodeChild(children: ReactNode): { language: string | null; code: string } {
@@ -10,24 +12,26 @@ function readCodeChild(children: ReactNode): { language: string | null; code: st
 
   const props = children.props as { className?: string; children?: ReactNode }
   const match = /language-([\w-]+)/.exec(props.className ?? '')
-  const code = typeof props.children === 'string' ? props.children : ''
+  const raw = props.children
+
+  const code = typeof raw === 'string' ? raw : Array.isArray(raw) ? raw.join('') : ''
 
   return { language: match?.[1] ?? null, code: code.replace(/\n$/, '') }
 }
 
-export function Markdown({ source }: { source: string }) {
+export function Markdown({ source, theme }: { source: string; theme: Theme }) {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeSlug]}
       components={{
-        pre({ children, ...rest }: ComponentPropsWithoutRef<'pre'>) {
+        pre({ children }: ComponentPropsWithoutRef<'pre'>) {
           const { language, code } = readCodeChild(children)
-          return (
-            <CodeBlock language={language} code={code}>
-              <pre {...rest}>{children}</pre>
-            </CodeBlock>
-          )
+
+          // Mermaid blokları kod olarak değil, diyagram olarak gösterilir.
+          if (language === 'mermaid') return <MermaidDiagram code={code} theme={theme} />
+
+          return <CodeBlock language={language} code={code} />
         },
         // Geniş tabloları kendi kabında yatay kaydır; sayfa gövdesi kaymasın.
         table({ children, ...rest }: ComponentPropsWithoutRef<'table'>) {

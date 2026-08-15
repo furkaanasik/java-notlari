@@ -6,7 +6,9 @@
     "dev": "vite",
     "check:mermaid": "node scripts/check-mermaid.mjs",
     "build": "npm run check:mermaid && tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:render": "node scripts/check-diagrams.mjs",
+    "shots": "node scripts/shots.mjs"
   },
   "keywords": [],
   "type": "module",
