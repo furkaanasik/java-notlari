@@ -12,6 +12,7 @@
  */
 import { readFile, writeFile, mkdir, rm } from 'node:fs/promises'
 import { join } from 'node:path'
+import GithubSlugger from 'github-slugger'
 
 const SOURCE = 'content/JAVA.md'
 const TARGET_DIR = 'content/java'
@@ -64,11 +65,9 @@ const outputs = GROUPS.map((group) => {
   const toc = group.sections.map((number) => {
     const heading = lines[starts.find((s) => s.number === number).index]
     const text = heading.replace(/^##\s+/, '')
-    const anchor = text
-      .toLocaleLowerCase('tr')
-      .replace(/[^\p{L}\p{N}\s-]/gu, '')
-      .trim()
-      .replace(/\s+/g, '-')
+    // Çapa, önyüzün ve GitHub'ın kullandığı slug üreticisiyle aynı olmalı;
+    // elle yazılmış bir sadeleştirme "—" ve "İ" gibi karakterlerde tutmuyordu.
+    const anchor = new GithubSlugger().slug(text)
     return `- [${text}](#${anchor})`
   })
 

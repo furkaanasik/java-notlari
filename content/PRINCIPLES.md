@@ -18,7 +18,7 @@ aynısı C#, Go, TypeScript veya Python için de geçerlidir.
    - [ISP — Interface Segregation](#14-isp--interface-segregation-principle)
    - [DIP — Dependency Inversion](#15-dip--dependency-inversion-principle)
 2. [DRY — Don't Repeat Yourself](#2-dry--dont-repeat-yourself)
-3. [KISS — Keep It Simple](#3-kiss--keep-it-simple)
+3. [KISS — Keep It Simple](#3-kiss--keep-it-simple-stupid)
 4. [YAGNI — You Aren't Gonna Need It](#4-yagni--you-arent-gonna-need-it)
 5. [Coupling & Cohesion](#5-coupling--cohesion)
 6. [Separation of Concerns](#6-separation-of-concerns)

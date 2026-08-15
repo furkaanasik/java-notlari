@@ -12,7 +12,7 @@ Streams → JVM → Concurrency → Java 21.
 - [4. Hashing ve Nesne Eşitliği](#4-hashing-ve-nesne-eşitliği)
 - [5. Akış Kontrolü ve Modern Switch Yapıları](#5-akış-kontrolü-ve-modern-switch-yapıları)
 - [6. Metodlar ve Parametre Yönetimi](#6-metodlar-ve-parametre-yönetimi)
-- [7. Paketleme ve İsimlendirme Standartları](#7-paketleme-ve-isimlendirme-standartları)
+- [7. Paketleme ve İsimlendirme Standartları](#7-paketleme-ve-i̇simlendirme-standartları)
 
 ---
 

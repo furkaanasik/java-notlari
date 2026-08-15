@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "vite",
     "check:mermaid": "node scripts/check-mermaid.mjs",
-    "build": "npm run check:mermaid && tsc -b && vite build",
+    "build": "npm run check:mermaid && npm run check:content && tsc -b && vite build",
     "preview": "vite preview",
     "check:render": "node scripts/check-diagrams.mjs",
     "shots": "node scripts/shots.mjs",
-    "verify": "node scripts/verify.mjs"
+    "verify": "node scripts/verify.mjs",
+    "test": "vitest run",
+    "check:content": "node scripts/check-content.mjs"
   },
   "keywords": [],
   "type": "module",

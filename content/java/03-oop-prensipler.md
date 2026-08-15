@@ -6,9 +6,9 @@ Streams → JVM → Concurrency → Java 21.
 
 ## İçindekiler
 
-- [10. OOP — Faz 2: OOP Prensipleri](#10-oop-faz-2-oop-prensipleri)
-- [11. OOP — Faz 3: İlişki Tipleri, instanceof ve Type Casting](#11-oop-faz-3-ilişki-tipleri-instanceof-ve-type-casting)
-- [12. OOP — Faz 4: Modern Java OOP](#12-oop-faz-4-modern-java-oop)
+- [10. OOP — Faz 2: OOP Prensipleri](#10-oop--faz-2-oop-prensipleri)
+- [11. OOP — Faz 3: İlişki Tipleri, instanceof ve Type Casting](#11-oop--faz-3-i̇lişki-tipleri-instanceof-ve-type-casting)
+- [12. OOP — Faz 4: Modern Java OOP](#12-oop--faz-4-modern-java-oop)
 
 ---
 

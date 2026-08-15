@@ -6,8 +6,8 @@ Streams → JVM → Concurrency → Java 21.
 
 ## İçindekiler
 
-- [8. OOP — Faz 1: Temel Kavramlar](#8-oop-faz-1-temel-kavramlar)
-- [9. OOP — Faz 1: NotebookLM Detaylı Notlar (Örneklerle)](#9-oop-faz-1-notebooklm-detaylı-notlar-örneklerle)
+- [8. OOP — Faz 1: Temel Kavramlar](#8-oop--faz-1-temel-kavramlar)
+- [9. OOP — Faz 1: NotebookLM Detaylı Notlar (Örneklerle)](#9-oop--faz-1-notebooklm-detaylı-notlar-örneklerle)
 
 ---
 

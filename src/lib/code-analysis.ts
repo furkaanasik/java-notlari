@@ -15,10 +15,32 @@ export type Segment = {
 }
 
 /** Yalnız başına duran yorum satırı mı, ve hangi tarafı işaret ediyor? */
-const BEFORE_HEADER =
-  /^\s*(?:\/\/|#)\s*(?:❌\s*)?(\d\.\s*)?(önce|kötü|problem|yanlış|hatalı|naif|eski\s*yöntem|anti-?pattern|kaçın|test\s*edilemez|seam\s*yok)\b.*$/i
-const AFTER_HEADER =
-  /^\s*(?:\/\/|#)\s*(?:✅\s*)?(\d\.\s*)?(sonra|iyi|çözüm|doğru|yeni\s*yöntem|kullan|test\s*edilebilir|seam\s*açıldı)\b.*$/i
+/*
+ * Sözcük sonu için `\b` KULLANILMIYOR: JavaScript'te `\b` yalnızca ASCII sözcük
+ * karakterlerine göre çalışır, bu yüzden "kötü", "çözüm", "yanlış" gibi Türkçe
+ * harfle biten anahtar sözcüklerden sonra hiç eşleşmiyordu — `// Kötü` / `// İyi`
+ * çiftleri sessizce tanınmadan geçiyordu. Yerine Unicode harf/rakam olumsuzlaması.
+ */
+const WORD_END = '(?![\\p{L}\\p{N}])'
+
+const BEFORE_HEADER = new RegExp(
+  `^\\s*(?://|#)\\s*(?:❌\\s*)?(\\d\\.\\s*)?(önce|kötü|problem|yanlış|hatalı|naif|eski\\s*yöntem|anti-?pattern|kaçın|test\\s*edilemez|seam\\s*yok)${WORD_END}.*$`,
+  'iu',
+)
+const AFTER_HEADER = new RegExp(
+  `^\\s*(?://|#)\\s*(?:✅\\s*)?(\\d\\.\\s*)?(sonra|iyi|çözüm|doğru|yeni\\s*yöntem|kullan|test\\s*edilebilir|seam\\s*açıldı)${WORD_END}.*$`,
+  'iu',
+)
+
+/**
+ * Regex'ten önce Türkçe büyük harf tuzaklarını giderir.
+ *
+ * JavaScript'in `i` bayrağı Unicode katlaması yapar: `İ` (U+0130) ASCII `i`'ye
+ * katlanmaz, `I` da `ı`'ya. Bu yüzden `// İyi` başlığı hiç eşleşmiyordu.
+ */
+function normalizeTr(line: string): string {
+  return line.replace(/İ/g, 'i').replace(/I/g, 'ı')
+}
 
 /** Yorumun görünen metnini çıkar (başlık etiketi olarak kullanılır). */
 function headerLabel(line: string): string {
@@ -41,10 +63,10 @@ export function splitComparison(code: string): [Segment, Segment] | null {
   let afterCount = 0
 
   lines.forEach((line, index) => {
-    if (BEFORE_HEADER.test(line)) {
+    if (BEFORE_HEADER.test(normalizeTr(line))) {
       beforeCount++
       if (beforeAt === -1) beforeAt = index
-    } else if (AFTER_HEADER.test(line)) {
+    } else if (AFTER_HEADER.test(normalizeTr(line))) {
       afterCount++
       if (afterAt === -1) afterAt = index
     }

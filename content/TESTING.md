@@ -18,7 +18,7 @@ kod, kötü tasarlanmış koddur — test framework'ü suçlu değildir.
 4. [FIRST prensipleri](#4-first-prensipleri)
 5. [JUnit 5](#5-junit-5)
 6. [Assertion'lar](#6-assertionlar)
-7. [Test Double'lar](#7-test-doubleler)
+7. [Test Double'lar](#7-test-doublelar)
 8. [Mockito](#8-mockito)
 9. [Mock ne zaman tasarım kokusudur](#9-mock-ne-zaman-tasarım-kokusudur)
 10. [Test edilebilirlik = iyi tasarım](#10-test-edilebilirlik--iyi-tasarım)
