@@ -72,6 +72,16 @@
   --c-text-muted: oklch(0.65 0.006 286); /* zinc-500 */
   --c-text-faint: oklch(0.55 0.006 286);
   --c-code-text: oklch(0.9 0.004 286);
+
+  /* ---- Graf renkleri ----
+     Kategoriler nötr kalır, ayırt edici renk ilişki türlerine ayrılır. */
+  --cat-creational: oklch(0.79 0.15 78); /* amber — ana vurgu */
+  --cat-structural: oklch(0.72 0.06 240);
+  --cat-behavioral: oklch(0.7 0.07 150);
+
+  --edge-confused: oklch(0.7 0.13 30);
+  --edge-together: oklch(0.68 0.1 200);
+  --edge-opposite: oklch(0.62 0.02 286);
 }
 
 /* ---- Renk: LIGHT (dark'ın türevi) ---- */

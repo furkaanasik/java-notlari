@@ -29,6 +29,17 @@ Her dosya aynı iskelette:
 
 ---
 
+## Pattern ilişki haritası
+
+Aşağıdaki graf, her pattern dosyasının "İlgili ve karıştırılan pattern'ler"
+tablolarından otomatik çıkarılır. Bir düğüme tıklayınca o pattern'in hangi
+pattern'lerle karıştırıldığını, hangileriyle birlikte kullanıldığını ve
+hangisinin zıttı olduğunu bir arada görürsün.
+
+<!-- component:PatternGraph -->
+
+---
+
 ## Creational — nesne nasıl yaratılır
 
 Ortak dert: `new` operatörü kodu somut sınıfa çiviler.

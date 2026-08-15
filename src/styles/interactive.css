@@ -1,0 +1,334 @@
+/* Markdown içinden çağrılan interaktif bileşenler */
+
+.markdown .pgraph {
+  margin-block: var(--space-block);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-code);
+  background: var(--c-bg-panel);
+  overflow: hidden;
+}
+
+/* Graf gövdeden geniştir — yer varsa taşır */
+@media (min-width: 1180px) {
+  .markdown .pgraph {
+    width: calc(100% + 2 * var(--compare-bleed));
+    margin-inline: calc(-1 * var(--compare-bleed));
+  }
+}
+
+.pgraph__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.pgraph__filters {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.pgraph__filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 5px;
+  border: 1px solid var(--c-border);
+  font-size: 0.75rem;
+  color: var(--c-text-muted);
+  transition: opacity 120ms, color 120ms;
+}
+
+.pgraph__filter[data-on='false'] {
+  opacity: 0.4;
+}
+
+.pgraph__filter:hover {
+  color: var(--c-text-strong);
+}
+
+.pgraph__swatch {
+  width: 9px;
+  height: 3px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.pgraph__filter--confused .pgraph__swatch,
+.pgraph__swatch--confused {
+  background: var(--edge-confused);
+}
+
+.pgraph__filter--together .pgraph__swatch,
+.pgraph__swatch--together {
+  background: var(--edge-together);
+}
+
+.pgraph__filter--opposite .pgraph__swatch,
+.pgraph__swatch--opposite {
+  background: var(--edge-opposite);
+}
+
+.pgraph__hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--c-text-faint);
+}
+
+.pgraph__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+}
+
+.pgraph__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  padding: 0.5rem;
+}
+
+/* ---- kenarlar ---- */
+
+.pgraph__edge {
+  fill: none;
+  stroke-width: 1.1;
+  opacity: 0.5;
+  transition: opacity 140ms, stroke-width 140ms;
+}
+
+.pgraph__edge--confused {
+  stroke: var(--edge-confused);
+}
+
+.pgraph__edge--together {
+  stroke: var(--edge-together);
+}
+
+.pgraph__edge--opposite {
+  stroke: var(--edge-opposite);
+}
+
+.pgraph__edge[data-active='true'] {
+  opacity: 1;
+  stroke-width: 2;
+}
+
+.pgraph__edge[data-dimmed='true'] {
+  opacity: 0.08;
+}
+
+/* ---- düğümler ---- */
+
+.pgraph__node {
+  cursor: pointer;
+}
+
+.pgraph__dot {
+  transition: r 140ms, opacity 140ms;
+}
+
+.pgraph__dot--creational {
+  fill: var(--cat-creational);
+}
+
+.pgraph__dot--structural {
+  fill: var(--cat-structural);
+}
+
+.pgraph__dot--behavioral {
+  fill: var(--cat-behavioral);
+}
+
+/* Dosyası olmayan pattern'ler içi boş görünür */
+.pgraph__node[data-planned='true'] .pgraph__dot {
+  fill: var(--c-bg-panel);
+  stroke: var(--c-text-faint);
+  stroke-width: 1.5;
+}
+
+.pgraph__node[data-planned='true'] .pgraph__label {
+  fill: var(--c-text-faint);
+}
+
+/* Tıklama alanı: nokta 6px, hedef 20px */
+.pgraph__hit {
+  fill: transparent;
+}
+
+.pgraph__label {
+  font-size: 15px;
+  fill: var(--c-text-muted);
+  transition: fill 140ms, opacity 140ms;
+}
+
+.pgraph__node:hover .pgraph__label,
+.pgraph__node[data-selected='true'] .pgraph__label {
+  fill: var(--c-text-strong);
+  font-weight: 600;
+}
+
+.pgraph__node[data-dimmed='true'] {
+  opacity: 0.25;
+}
+
+/* ---- yan panel ---- */
+
+.pgraph__panel {
+  border-left: 1px solid var(--c-border);
+  padding: 1rem;
+  max-height: 720px;
+  overflow-y: auto;
+  font-size: 0.875rem;
+}
+
+.pgraph__panel-cat {
+  margin: 0;
+  font-size: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+
+.pgraph__panel-cat--creational {
+  color: var(--cat-creational);
+}
+
+.pgraph__panel-cat--structural {
+  color: var(--cat-structural);
+}
+
+.pgraph__panel-cat--behavioral {
+  color: var(--cat-behavioral);
+}
+
+.markdown .pgraph__panel-title {
+  margin: 0.15rem 0 0.6rem;
+  font-size: 1.125rem;
+  font-weight: 650;
+  color: var(--c-text-strong);
+}
+
+.pgraph__open {
+  font-size: 0.75rem;
+  color: var(--c-accent-strong);
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--c-border);
+  border-radius: 5px;
+}
+
+.pgraph__open:hover {
+  background: var(--c-bg-hover);
+}
+
+.pgraph__planned {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--c-text-faint);
+}
+
+.markdown .pgraph__relations {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0;
+}
+
+.markdown .pgraph__relations > li {
+  margin: 0 0 0.85rem;
+  padding: 0;
+}
+
+.markdown .pgraph__relation-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.15rem;
+}
+
+.pgraph__relation-name {
+  font-weight: 600;
+  color: var(--c-text-strong);
+}
+
+.pgraph__relation-name:hover {
+  color: var(--c-accent-strong);
+  text-decoration: underline;
+}
+
+.pgraph__relation-kind {
+  font-size: 0.6875rem;
+  color: var(--c-text-faint);
+}
+
+.markdown .pgraph__relation-note {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--c-text-muted);
+}
+
+.pgraph__empty p {
+  margin: 0 0 0.65rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--c-text-muted);
+}
+
+.markdown .pgraph__legend {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--c-text-muted);
+}
+
+.markdown .pgraph__legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.pgraph__legend .pgraph__swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.pgraph__legend .pgraph__dot--creational {
+  background: var(--cat-creational);
+}
+
+.pgraph__legend .pgraph__dot--structural {
+  background: var(--cat-structural);
+}
+
+.pgraph__legend .pgraph__dot--behavioral {
+  background: var(--cat-behavioral);
+}
+
+.interactive-missing {
+  border: 1px dashed var(--c-border);
+  border-radius: var(--radius-code);
+  padding: 0.75rem;
+  color: var(--c-text-faint);
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 900px) {
+  .pgraph__body {
+    grid-template-columns: 1fr;
+  }
+
+  .pgraph__panel {
+    border-left: none;
+    border-top: 1px solid var(--c-border);
+    max-height: none;
+  }
+}

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { docs, extractHeadings, stripManualToc } from './content/docs'
 import { CATEGORY_LABELS } from './config/order'
-import { Markdown } from './components/Markdown'
+import { Markdown, expandComponentMarkers } from './components/Markdown'
 import { Sidebar } from './components/Sidebar'
 import { Toc } from './components/Toc'
 import { Header } from './components/Header'
@@ -15,7 +15,10 @@ export default function App() {
   const doc = docs.find((d) => d.slug === activeSlug)
 
   // Elle yazılmış "## İçindekiler" bloğu gövdeden çıkarılır; sağ panel onun yerini alır.
-  const body = useMemo(() => (doc ? stripManualToc(doc.source) : ''), [doc])
+  const body = useMemo(
+    () => (doc ? expandComponentMarkers(stripManualToc(doc.source)) : ''),
+    [doc],
+  )
   const headings = useMemo(() => extractHeadings(body), [body])
 
   // Dosya değişince içerik en üste dönsün.
@@ -49,7 +52,7 @@ export default function App() {
             <div className="content-pad mx-auto py-12">
               {doc ? (
                 <article className="markdown">
-                  <Markdown source={body} theme={theme} />
+                  <Markdown source={body} theme={theme} onNavigate={setActiveSlug} />
                 </article>
               ) : (
                 <p>Dosya bulunamadı.</p>
