@@ -2,16 +2,25 @@
 
 Gang of Four (GoF) — 23 pattern, her biri ayrı dosyada.
 
-> **Durum: 12/23 hazır.** Creational (01-05) ve Structural (06-12) tamamlandı.
-> Behavioral bölümü (13-23) **planlanan** — henüz yazılmadı, aşağıdaki tabloda
-> link verilmemiş satırlar bunlardır.
+> **Durum: 23/23 hazır.**
 
 ## Nasıl okunmalı
 
-Sırayla okumak zorunda değilsin. Mevcut dosyalar içinde
-**Factory Method → Adapter → Decorator** üçlüsü diğerlerinin dilini kurar;
-oradan başla. (Behavioral bölümü yazıldığında giriş üçlüsü Strategy ve Observer
-ile güncellenecek.)
+Sırayla okumak zorunda değilsin ama **Strategy → Factory Method → Observer**
+üçlüsü diğerlerinin dilini kurar. Onlardan başla.
+
+Sonra ikili karşılaştırmalara bak — kataloğun asıl zorluğu tek tek pattern'ler
+değil, birbirine benzeyenleri ayırmaktır:
+
+| Karışan çift | Ayırt edici soru |
+|---|---|
+| [Strategy](20-strategy.md) ↔ [State](19-state.md) | Nesne kendi davranışını kendisi mi değiştiriyor? |
+| [Decorator](09-decorator.md) ↔ [Proxy](12-proxy.md) | Sarmalayıcı çağrıyı engelleyebiliyor mu? |
+| [Decorator](09-decorator.md) ↔ [Chain of Responsibility](13-chain-of-responsibility.md) | Zincir erken durabiliyor mu? |
+| [Strategy](20-strategy.md) ↔ [Bridge](07-bridge.md) | Soyutlama tarafında hiyerarşi var mı? |
+| [Mediator](16-mediator.md) ↔ [Observer](18-observer.md) | Koordinasyon kuralını kim sahipleniyor? |
+| [Facade](10-facade.md) ↔ [Mediator](16-mediator.md) | Alt sistem aracıyı tanıyor mu? |
+| [Memento](17-memento.md) ↔ [Prototype](04-prototype.md) | Kopya dışarıya kapalı mı? |
 
 Her dosya aynı iskelette:
 
@@ -70,23 +79,19 @@ Ortak dert: sınıfları birbirine bağlarken esnekliği kaybetmemek.
 
 Ortak dert: sorumluluk dağıtımı ve iletişim.
 
-> **Bu bölümün tamamı planlanan durumdadır** — aşağıdaki 11 pattern için henüz
-> dosya yok. Diğer dosyalarda bunlara yapılan atıflar (özellikle Strategy,
-> Observer, State, Iterator, Visitor) şimdilik hedefsizdir.
-
-| # | Pattern | Tek cümle | Durum |
-|---|---|---|---|
-| 13 | Chain of Responsibility | İsteği zincirdeki handler'lara sırayla dolaştır | planlanan |
-| 14 | Command | İşlemi nesneye çevir (undo, kuyruk, log) | planlanan |
-| 15 | Iterator | Koleksiyonu iç yapısını açmadan gez | planlanan |
-| 16 | Mediator | Nesneler birbirine değil aracıya konuşsun | planlanan |
-| 17 | Memento | State'in snapshot'ını al, geri yükle | planlanan |
-| 18 | Observer | Durum değişince ilgilenenlere haber ver | planlanan |
-| 19 | State | Davranışı state nesnesine devret, if-else yığınını sil | planlanan |
-| 20 | Strategy | Algoritmayı dışarıdan değiştirilebilir yap | planlanan |
-| 21 | Template Method | İskeleti üst sınıfta sabitle, adımları alt sınıfa bırak | planlanan |
-| 22 | Visitor | Sınıfları değiştirmeden yeni işlem ekle | planlanan |
-| 23 | Interpreter | Küçük bir dil tanımla ve yorumla (nadir) | planlanan |
+| # | Pattern | Tek cümle |
+|---|---|---|
+| 13 | [Chain of Responsibility](13-chain-of-responsibility.md) | İsteği zincirdeki handler'lara sırayla dolaştır |
+| 14 | [Command](14-command.md) | İşlemi nesneye çevir (undo, kuyruk, log) |
+| 15 | [Iterator](15-iterator.md) | Koleksiyonu iç yapısını açmadan gez |
+| 16 | [Mediator](16-mediator.md) | Nesneler birbirine değil aracıya konuşsun |
+| 17 | [Memento](17-memento.md) | State'in snapshot'ını al, geri yükle |
+| 18 | [Observer](18-observer.md) | Durum değişince ilgilenenlere haber ver |
+| 19 | [State](19-state.md) | Davranışı state nesnesine devret, if-else yığınını sil |
+| 20 | [Strategy](20-strategy.md) | Algoritmayı dışarıdan değiştirilebilir yap |
+| 21 | [Template Method](21-template-method.md) | İskeleti üst sınıfta sabitle, adımları alt sınıfa bırak |
+| 22 | [Visitor](22-visitor.md) | Sınıfları değiştirmeden yeni işlem ekle |
+| 23 | [Interpreter](23-interpreter.md) | Küçük bir dil tanımla ve yorumla (nadir) |
 
 ---
 

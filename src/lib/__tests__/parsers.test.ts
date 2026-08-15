@@ -188,12 +188,13 @@ describe('pattern grafiği', () => {
     expect(patternGraph.nodes).toHaveLength(23)
   })
 
-  it('dosyası olan pattern sayısı 12', () => {
-    expect(patternGraph.nodes.filter((node) => node.slug !== null)).toHaveLength(12)
+  it('23 pattern\'in de dosyası var', () => {
+    const missing = patternGraph.nodes.filter((node) => node.slug === null)
+    expect(missing.map((node) => node.name)).toEqual([])
   })
 
   it('ilişkiler tablolardan çıkarılır', () => {
-    expect(patternGraph.edges.length).toBeGreaterThanOrEqual(25)
+    expect(patternGraph.edges.length).toBeGreaterThanOrEqual(50)
 
     const decoratorProxy = patternGraph.edges.find(
       (edge) =>

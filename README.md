@@ -339,5 +339,6 @@ dahil **0 ihlal**. Denetim şunları yakaladı ve düzeltildi:
 
 ## Henüz yapılmadı
 
-- Behavioral pattern dosyaları (13-23) — içerik işi
-- JAVA.md'de bölüm 8/9 tekrarı ve eksik `java.time` / Generics bölümleri
+- Java notlarında OOP bölümündeki tekrar (Faz 1 ve NotebookLM notları büyük
+  ölçüde aynı içeriği iki kez anlatıyor)
+- Eksik konular: `java.time`, bağımsız bir Generics bölümü
