@@ -332,3 +332,177 @@
     max-height: none;
   }
 }
+
+/* ---------------- Koku → refactoring → prensip haritası ---------------- */
+
+.markdown .smap {
+  margin-block: var(--space-block);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-code);
+  background: var(--c-bg-panel);
+  overflow: hidden;
+}
+
+@media (min-width: 1180px) {
+  .markdown .smap {
+    width: calc(100% + 2 * var(--compare-bleed));
+    margin-inline: calc(-1 * var(--compare-bleed));
+  }
+}
+
+.smap__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.markdown .smap__summary,
+.markdown .smap__hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--c-text-muted);
+}
+
+.markdown .smap__summary strong {
+  color: var(--c-text-strong);
+}
+
+.smap__clear {
+  font-size: 0.75rem;
+  color: var(--c-accent-strong);
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--c-border);
+  border-radius: 5px;
+}
+
+.smap__clear:hover {
+  background: var(--c-bg-hover);
+}
+
+.smap__cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 1fr);
+}
+
+.smap__col + .smap__col {
+  border-left: 1px solid var(--c-border);
+}
+
+.markdown .smap__col-title {
+  margin: 0;
+  padding: 0.55rem 0.85rem;
+  font-size: var(--text-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-muted);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.markdown .smap__list {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem;
+  max-height: 30rem;
+  overflow-y: auto;
+}
+
+.markdown .smap__list > li {
+  margin: 0;
+  padding: 0;
+}
+
+.smap__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.35rem 0.5rem;
+  border-radius: 5px;
+  border-left: 2px solid transparent;
+  transition: opacity 140ms, background-color 140ms, border-color 140ms;
+}
+
+.smap__item:hover {
+  background: var(--c-bg-hover);
+}
+
+.smap__item[data-dim='true'] {
+  opacity: 0.25;
+}
+
+.smap__item[data-on='true'] {
+  background: var(--c-accent-quiet);
+  border-left-color: var(--c-accent);
+}
+
+.smap__name {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--c-text-strong);
+}
+
+.smap__item--refactoring .smap__name {
+  color: var(--cat-structural);
+}
+
+.smap__item--principle .smap__name {
+  color: var(--cat-behavioral);
+}
+
+.smap__symptom {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--c-text-faint);
+  margin-top: 0.1rem;
+}
+
+.smap__detail {
+  border-top: 1px solid var(--c-border);
+  padding: 0.6rem 0.85rem;
+  background: var(--c-bg-quote);
+}
+
+.markdown .smap__chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin: 0 0 0.3rem;
+  font-size: 0.8125rem;
+}
+
+.markdown .smap__chain:last-child {
+  margin-bottom: 0;
+}
+
+.smap__chain-smell {
+  color: var(--c-text-strong);
+  font-weight: 550;
+}
+
+.smap__chain-ref {
+  color: var(--cat-structural);
+}
+
+.smap__chain-pri {
+  color: var(--cat-behavioral);
+}
+
+.smap__arrow {
+  color: var(--c-text-faint);
+}
+
+@media (max-width: 900px) {
+  .smap__cols {
+    grid-template-columns: 1fr;
+  }
+
+  .smap__col + .smap__col {
+    border-left: none;
+    border-top: 1px solid var(--c-border);
+  }
+}

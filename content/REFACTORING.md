@@ -814,6 +814,8 @@ soyutlama eklemişsindir ama coupling'i azaltmamışsındır.
 
 # 14. Koku → çözüm haritası
 
+<!-- component:SmellMap -->
+
 | Koku | Refactoring | İlgili prensip |
 |---|---|---|
 | Long Method | Extract Method, Decompose Conditional | SRP, KISS |
