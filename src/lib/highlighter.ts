@@ -1,4 +1,4 @@
-import { createHighlighter, type Highlighter } from 'shiki'
+import type { Highlighter } from 'shiki'
 
 /**
  * Kod blokları her iki temada da koyu yüzeyde durduğu için tek bir koyu
@@ -11,8 +11,14 @@ const LANGS = ['java', 'json', 'sql', 'bash', 'xml', 'properties', 'yaml', 'diff
 
 let instance: Promise<Highlighter> | null = null
 
+/**
+ * shiki dinamik olarak yüklenir — ~300 kB'lik vurgulama motoru ana pakete
+ * girmesin. İlk kod bloğu görününce indirilir, sonra önbellekten gelir.
+ */
 export function getHighlighter(): Promise<Highlighter> {
-  instance ??= createHighlighter({ themes: [CODE_THEME], langs: LANGS })
+  instance ??= import('shiki').then((shiki) =>
+    shiki.createHighlighter({ themes: [CODE_THEME], langs: LANGS }),
+  )
   return instance
 }
 

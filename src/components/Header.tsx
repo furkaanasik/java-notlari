@@ -6,12 +6,14 @@ type Props = {
   theme: Theme
   onToggleTheme: () => void
   onOpenSearch: () => void
+  /** 0-1 arası okuma ilerlemesi */
+  progress: number
 }
 
-export function Header({ title, category, theme, onToggleTheme, onOpenSearch }: Props) {
+export function Header({ title, category, theme, onToggleTheme, onOpenSearch, progress }: Props) {
   return (
     <header
-      className="sticky top-0 z-30 flex items-center justify-between border-b px-5"
+      className="sticky top-0 z-30 flex items-center justify-between border-b px-5 relative"
       style={{
         height: 'var(--header-h)',
         background: 'color-mix(in oklch, var(--c-bg-content) 88%, transparent)',
@@ -19,6 +21,16 @@ export function Header({ title, category, theme, onToggleTheme, onOpenSearch }: 
         backdropFilter: 'blur(8px)',
       }}
     >
+      {/* Okuma ilerlemesi — başlığın alt kenarında ince şerit */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] origin-left transition-transform duration-150"
+        style={{
+          background: 'var(--c-accent)',
+          transform: `scaleX(${progress})`,
+        }}
+        aria-hidden="true"
+      />
+
       <div className="flex min-w-0 items-center gap-2">
         {category && (
           <>

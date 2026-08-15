@@ -945,3 +945,12 @@
     border-top: 1px solid var(--c-border);
   }
 }
+
+.interactive-loading {
+  padding: 1.25rem;
+  border: 1px dashed var(--c-border);
+  border-radius: var(--radius-code);
+  color: var(--c-text-faint);
+  font-size: 0.8125rem;
+  text-align: center;
+}

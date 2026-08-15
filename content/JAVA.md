@@ -254,20 +254,20 @@ map.put("Veli", 30);
 map.put("Ayşe", 28);
 ```
 
-Aşağıdaki şemada bucket indeksi `% 16` ile gösteriliyor — bu sadece anlatım kolaylığı.
-Gerçekte HashMap `%` kullanmaz: önce hash'i yayar (`h ^ (h >>> 16)`), sonra
-`(n - 1) & hash` ile indeksi bulur. `%` negatif hash'te negatif indeks üretirdi,
-`&` üretmez.
+HashMap indeksi `%` ile bulmaz: önce hash'i yayar (`h ^ (h >>> 16)`), sonra
+`(n - 1) & hash` uygular. `%` negatif hash'te negatif indeks üretirdi, `&` üretmez.
+
+Aşağıdaki indeksler 16 kapasiteli bir tabloda **gerçek** değerlerdir:
 
 ```
-"Ali".hashCode()  → Bucket[5]
-"Veli".hashCode() → Bucket[9]
-"Ayşe".hashCode() → Bucket[2]
+"Ali".hashCode()  =   65918  → Bucket[15]
+"Veli".hashCode() = 2662540  → Bucket[4]
+"Ayşe".hashCode() = 2063678  → Bucket[1]
 
 Bucket[0]  → boş
-Bucket[2]  → "Ayşe" → 28
-Bucket[5]  → "Ali"  → 25
-Bucket[9]  → "Veli" → 30
+Bucket[1]  → "Ayşe" → 28
+Bucket[4]  → "Veli" → 30
+Bucket[15] → "Ali"  → 25
 ...
 ```
 
@@ -276,9 +276,9 @@ STACK                     HEAP
 ──────────────────        ──────────────────────────────
 map = @2001    ────────►  HashMap (@2001)
                           └── internal array:
-                              Bucket[2]: Node{"Ayşe"→28}
-                              Bucket[5]: Node{"Ali"→25}
-                              Bucket[9]: Node{"Veli"→30}
+                              Bucket[1]:  Node{"Ayşe"→28}
+                              Bucket[4]:  Node{"Veli"→30}
+                              Bucket[15]: Node{"Ali"→25}
 ```
 
 <!-- component:HashMapBuckets -->
@@ -288,16 +288,16 @@ map = @2001    ────────►  HashMap (@2001)
 İki farklı key aynı bucket'a düşerse **collision** olur:
 
 ```java
-map.put("Ali", 25);   // → Bucket[5]
-map.put("Abc", 99);   // → Bucket[5]  ÇAKIŞMA!
+map.put("Ali", 25);    // → Bucket[15]
+map.put("Umut", 99);   // → Bucket[15]  ÇAKIŞMA!
 
-// Bucket[5]: Node{"Ali"→25} → Node{"Abc"→99}  (linked list gibi)
+// Bucket[15]: Node{"Ali"→25} → Node{"Umut"→99}  (linked list gibi)
 ```
 
-`map.get("Abc")` dersen:
-1. `"Abc".hashCode() % 16 = 5` → Bucket[5]'e git
+`map.get("Umut")` dersen:
+1. `(16 - 1) & spread("Umut".hashCode()) = 15` → Bucket[15]'e git
 2. "Ali" mi? Hayır → sonraki node
-3. "Abc" bulundu → 99 döndür
+3. "Umut" bulundu → 99 döndür
 
 | Durum | Arama Hızı |
 |---|---|

@@ -3,9 +3,11 @@ import { groupedDocs } from '../content/docs'
 type Props = {
   activeSlug: string
   onSelect: (slug: string) => void
+  /** Sonuna kadar okunmuş dosyaların slug'ları */
+  read: Set<string>
 }
 
-export function Sidebar({ activeSlug, onSelect }: Props) {
+export function Sidebar({ activeSlug, onSelect, read }: Props) {
   return (
     <nav aria-label="Dosyalar" className="py-6 pr-3 pl-5">
       {groupedDocs().map((group) => (
@@ -46,6 +48,16 @@ export function Sidebar({ activeSlug, onSelect }: Props) {
                     }}
                   >
                     <span className="truncate">{doc.title}</span>
+                    {read.has(doc.slug) && (
+                      <span
+                        className="ml-auto shrink-0"
+                        title="Okundu"
+                        aria-label="Okundu"
+                        style={{ color: 'var(--c-accent)', fontSize: '0.7rem' }}
+                      >
+                        ✓
+                      </span>
+                    )}
                   </button>
                 </li>
               )

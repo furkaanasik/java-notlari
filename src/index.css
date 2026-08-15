@@ -4,6 +4,7 @@
 @import './styles/tokens.css';
 @import './styles/markdown.css';
 @import './styles/interactive.css';
+@import './styles/print.css';
 
 /* Tema sınıf tabanlı: <html class="dark"> / <html class="light"> */
 @custom-variant dark (&:where(.dark, .dark *));

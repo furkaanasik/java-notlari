@@ -1,0 +1,148 @@
+/**
+ * Yazdırma / PDF stilleri.
+ *
+ * Hedef: ekranda işe yarayan ama kâğıtta anlamsız olan her şeyi kaldırmak
+ * (paneller, butonlar, tema) ve metni siyah-beyaz okunur bırakmak.
+ */
+
+@media print {
+  /* Renk değişkenlerini kâğıt için sıfırla — koyu tema mürekkep yakar. */
+  :root,
+  :root.dark,
+  :root.light {
+    --c-bg-content: #fff;
+    --c-bg-panel: #fff;
+    --c-bg-code: #f6f6f7;
+    --c-bg-inline: #f0f0f1;
+    --c-bg-table-head: #f2f2f3;
+    --c-bg-quote: #f8f8f9;
+    --c-bg-hover: transparent;
+    --c-border: #c8c8cc;
+    --c-border-soft: #e0e0e4;
+    --c-text: #16161a;
+    --c-text-strong: #000;
+    --c-text-muted: #3a3a40;
+    --c-text-faint: #5a5a62;
+    --c-code-text: #16161a;
+    --c-accent: #444;
+    --c-accent-strong: #000;
+    --c-accent-quiet: transparent;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+    font-size: 11pt;
+  }
+
+  /* Uygulama kabuğu: yükseklik kilidi ve kaydırma kalksın */
+  body > #root > div {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  main,
+  .content-pad {
+    overflow: visible !important;
+    max-width: none !important;
+    width: auto !important;
+    padding: 0 !important;
+  }
+
+  /* Ekrana ait olanlar kâğıda basılmaz */
+  header,
+  aside,
+  .palette,
+  .mermaid-modal,
+  .code-block__bar,
+  .mermaid__actions,
+  .pgraph__bar,
+  .smap__bar,
+  .hmap__bar,
+  .dchain__move,
+  .interactive-missing {
+    display: none !important;
+  }
+
+  .markdown {
+    max-width: none;
+    color: #000;
+  }
+
+  /* Başlıklar sayfa sonunda yalnız kalmasın */
+  .markdown :is(h1, h2, h3, h4) {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .markdown h2 {
+    margin-top: 1.6rem;
+    padding-top: 0.5rem;
+  }
+
+  /* Kod, tablo ve diyagramlar ortadan bölünmesin */
+  .markdown .code-block,
+  .markdown .table-wrap,
+  .markdown blockquote,
+  .markdown .mermaid,
+  .markdown .pgraph,
+  .markdown .smap,
+  .markdown .hmap,
+  .markdown .dchain {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    width: auto !important;
+    margin-inline: 0 !important;
+    border-color: #c8c8cc !important;
+  }
+
+  /* Kâğıtta kaydırma yok: içerik sarılsın */
+  .markdown .code-block__body,
+  .markdown .table-wrap {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  .markdown .code-block code {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* Karşılaştırma blokları kâğıtta her zaman yan yana anlamlı değil — alt alta */
+  .compare-split {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Bağlantı hedefleri kâğıtta görünmezdi; iç atıflar için gereksiz, dış için yaz */
+  .markdown a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+    color: #5a5a62;
+  }
+
+  .markdown a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+
+  /*
+   * shiki satır içi renkler koyu tema için üretilmiş; beyaz kâğıtta soluk
+   * kalıyor. Kâğıtta vurgulama yerine okunabilirlik önemli — hepsi siyaha iner.
+   */
+  .markdown .code-block code,
+  .markdown .code-block code span {
+    color: #16161a !important;
+  }
+
+  /* Satır numaraları kâğıtta gürültü */
+  .markdown .code-block code .line::before {
+    content: none;
+  }
+
+  @page {
+    margin: 18mm 16mm;
+  }
+}

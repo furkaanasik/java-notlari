@@ -1,8 +1,19 @@
-import type { ComponentType } from 'react'
-import { PatternGraph } from './PatternGraph'
-import { SmellMap } from './SmellMap'
-import { HashMapBuckets } from './HashMapBuckets'
-import { DecoratorChain } from './DecoratorChain'
+import { lazy, type ComponentType } from 'react'
+
+/*
+ * Bileşenler tembel yüklenir: yalnızca onları içeren doküman açıldığında
+ * indirilir, ana paket şişmez.
+ */
+const PatternGraph = lazy(() =>
+  import('./PatternGraph').then((mod) => ({ default: mod.PatternGraph })),
+)
+const SmellMap = lazy(() => import('./SmellMap').then((mod) => ({ default: mod.SmellMap })))
+const HashMapBuckets = lazy(() =>
+  import('./HashMapBuckets').then((mod) => ({ default: mod.HashMapBuckets })),
+)
+const DecoratorChain = lazy(() =>
+  import('./DecoratorChain').then((mod) => ({ default: mod.DecoratorChain })),
+)
 
 /**
  * Markdown içinden çağrılabilen interaktif bileşenler.

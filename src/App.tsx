@@ -8,6 +8,8 @@ import { Toc } from './components/Toc'
 import { Header } from './components/Header'
 import { SearchPalette } from './components/SearchPalette'
 import { useTheme } from './hooks/useTheme'
+import { useReadingProgress } from './hooks/useReadingProgress'
+import { useKeyboardNav } from './hooks/useKeyboardNav'
 
 export default function App() {
   const { theme, toggle } = useTheme()
@@ -46,6 +48,26 @@ export default function App() {
     [doc],
   )
   const headings = useMemo(() => extractHeadings(body), [body])
+
+  const { progress, read } = useReadingProgress(mainRef, activeSlug)
+
+  // n / p için komşu dosyalar
+  const currentIndex = docs.findIndex((item) => item.slug === activeSlug)
+  const goRelative = useCallback(
+    (step: 1 | -1) => {
+      const next = docs[currentIndex + step]
+      if (next) openDoc(next.slug)
+    },
+    [currentIndex, openDoc],
+  )
+
+  useKeyboardNav({
+    headings,
+    scrollRef: mainRef,
+    onNextDoc: () => goRelative(1),
+    onPrevDoc: () => goRelative(-1),
+    disabled: paletteOpen,
+  })
 
   /**
    * Doküman render edildikten sonra: bekleyen bir çapa varsa oraya, yoksa
@@ -90,7 +112,7 @@ export default function App() {
           borderColor: 'var(--c-border)',
         }}
       >
-        <Sidebar activeSlug={activeSlug} onSelect={openDoc} />
+        <Sidebar activeSlug={activeSlug} onSelect={openDoc} read={read} />
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -100,6 +122,7 @@ export default function App() {
           theme={theme}
           onToggleTheme={toggle}
           onOpenSearch={() => setPaletteOpen(true)}
+          progress={progress}
         />
 
         <div className="flex min-h-0 flex-1">

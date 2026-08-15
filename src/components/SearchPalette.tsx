@@ -1,5 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { search, type SearchHit } from '../lib/search'
+import { useEffect, useRef, useState } from 'react'
+import type { SearchHit } from '../lib/search'
+
+/**
+ * Arama motoru (flexsearch + indeks) yalnızca palet ilk açıldığında indirilir.
+ * Ana paketten ~100 kB çıkarır; kullanıcı aramayı hiç açmazsa hiç yüklenmez.
+ */
+type SearchFn = (query: string, limit?: number) => SearchHit[]
+let searchModule: Promise<SearchFn> | null = null
+function loadSearch(): Promise<SearchFn> {
+  searchModule ??= import('../lib/search').then((mod) => mod.search)
+  return searchModule
+}
 
 type Props = {
   open: boolean
@@ -14,12 +25,31 @@ export function SearchPalette({ open, onClose, onSelect }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
 
-  const hits = useMemo<SearchHit[]>(() => (open ? search(query) : []), [open, query])
+  const [searchFn, setSearchFn] = useState<SearchFn | null>(null)
+  const [hits, setHits] = useState<SearchHit[]>([])
+
+  // Palet açılınca motoru getir.
+  useEffect(() => {
+    if (!open || searchFn) return
+    let cancelled = false
+    loadSearch().then((fn) => {
+      if (!cancelled) setSearchFn(() => fn)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [open, searchFn])
+
+  useEffect(() => {
+    if (!open || !searchFn) return
+    setHits(searchFn(query))
+  }, [open, query, searchFn])
 
   useEffect(() => {
     if (!open) return
     setQuery('')
     setCursor(0)
+    setHits([])
     // Girdiye odaklan — palet açıldığında yazmaya hazır olsun.
     const id = window.setTimeout(() => inputRef.current?.focus(), 0)
     return () => window.clearTimeout(id)

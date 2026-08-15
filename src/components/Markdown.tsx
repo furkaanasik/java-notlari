@@ -1,4 +1,4 @@
-import { isValidElement, type ComponentPropsWithoutRef, type ReactNode } from 'react'
+import { Suspense, isValidElement, type ComponentPropsWithoutRef, type ReactNode } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
@@ -69,7 +69,13 @@ export function Markdown({ source, theme, onNavigate }: Props) {
           if (language === COMPONENT_LANG) {
             const name = code.trim()
             const Component = INTERACTIVE[name]
-            if (Component) return <Component onNavigate={onNavigate} />
+            if (Component) {
+              return (
+                <Suspense fallback={<p className="interactive-loading">Bileşen yükleniyor…</p>}>
+                  <Component onNavigate={onNavigate} />
+                </Suspense>
+              )
+            }
             return (
               <p className="interactive-missing">
                 Bilinmeyen interaktif bileşen: <code>{name}</code>

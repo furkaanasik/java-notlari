@@ -121,3 +121,25 @@ Senin kararın doğrultusunda:
 - `#` → `##` başlık dönüşümü **yapılmadı** — önyüzün içindekiler üreticisi h1'i de toplayacak.
 - Behavioral pattern dosyaları (13-23) **yazılmadı** — kapsam dışı.
 - Rapordaki "düşük" öncelikli maddeler (JAVA.md ortasındaki kayıp footer, bölüm 8/9 tekrarı, `Notifier.notify` adlandırması, Faz 1-4 adlandırması vb.) bu turda ele alınmadı.
+
+---
+
+## İçerik düzeltmesi — HashMap bucket değerleri
+
+`JAVA.md` bucket örneklerindeki indeksler gerçek Java değerleriyle uyuşmuyordu.
+Canlı hesap yapan `HashMapBuckets` bileşeni aynı sayfaya eklenince fark görünür
+hâle geldi ve doküman düzeltildi:
+
+| Anahtar | Önce | Sonra (doğrulandı) |
+|---|---|---|
+| `"Ali"` | Bucket[5] | Bucket[15] |
+| `"Veli"` | Bucket[9] | Bucket[4] |
+| `"Ayşe"` | Bucket[2] | Bucket[1] |
+
+Çakışma örneği de gerçek değildi: `"Ali"` ve `"Abc"` 16 kapasiteli tabloda
+çakışmıyor (15 ve 3). Örnek, gerçekten çakışan `"Ali"` / `"Umut"` çiftiyle
+değiştirildi — ikisi de Bucket[15]'e düşüyor. `get()` adımlarındaki `% 16`
+ifadesi de `(16 - 1) & spread(...)` olarak düzeltildi.
+
+Değerler `String.hashCode()` ile doğrulandı: `"Ali"` = 65918, `"Veli"` = 2662540,
+`"Ayşe"` = 2063678, `"Umut"` = hash'i yayıldığında 15'e düşüyor.

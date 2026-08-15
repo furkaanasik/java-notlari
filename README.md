@@ -163,9 +163,53 @@ src/
 
 ---
 
+## Klavye
+
+| Tuş | Ne yapar |
+|---|---|
+| `Cmd/Ctrl+K` | Arama paleti |
+| `j` / `k` | Sonraki / önceki başlık |
+| `n` / `p` | Sonraki / önceki dosya |
+| `↑ ↓` `↵` `esc` | Palet içinde gezinme |
+
+Bir metin alanına yazarken kısayollar susar.
+
+---
+
+## Okuma ilerlemesi
+
+Başlığın alt kenarındaki ince şerit, açık dosyada ne kadar ilerlediğini gösterir.
+Bir dosyanın sonuna gelindiğinde sidebar'da ✓ ile işaretlenir; işaretler
+`localStorage`'da tutulur ve yenilemede korunur.
+
+---
+
+## Yazdırma
+
+`Cmd/Ctrl+P` doğrudan çalışır: paneller, başlık çubuğu ve butonlar kâğıda
+basılmaz, koyu tema beyaza döner, kod ve tablolar kaydırma yerine sarar,
+başlıklar sayfa sonunda yalnız bırakılmaz. Dış bağlantıların adresi metne eklenir.
+
+---
+
+## Paket boyutu
+
+Ana paket ~810 kB (gzip ~259 kB). Büyük kısmı gömülü markdown içeriğinin
+kendisidir — `import.meta.glob(..., eager)` bilinçli bir tercih: gezinme anlık,
+site çevrimdışı çalışıyor ve tek klasörlük statik dağıtım yetiyor.
+
+Ağır kütüphaneler ayrı parçalara bölündü ve ihtiyaç anında indiriliyor:
+
+| Parça | Ne zaman yüklenir |
+|---|---|
+| `shiki` | Sayfada ilk kod bloğu göründüğünde |
+| `mermaid` | Diyagram içeren bir dosya açıldığında |
+| `flexsearch` + arama indeksi | Palet ilk kez açıldığında |
+| İnteraktif bileşenler | Yalnızca onları içeren doküman açıldığında |
+
+---
+
 ## Henüz yapılmadı
 
-- Okuma ilerlemesi ve okundu işaretleri
-- Klavye navigasyonu (`j/k`, `n/p`)
-- Yazdırma / PDF için baskı stilleri
-- Paket bölme — ana paket şu an ~950 kB (gzip ~300 kB)
+- Behavioral pattern dosyaları (13-23) — içerik işi
+- JAVA.md'de bölüm 8/9 tekrarı ve eksik `java.time` / Generics bölümleri
