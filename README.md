@@ -124,6 +124,7 @@ Aksi hâlde blok normal gösterilir.
 
 ```
 content/              Markdown kaynak (tek doğruluk kaynağı)
+  java/               Java dili notları (11 dosya)
   patterns/           Design pattern dosyaları
 scripts/
   check-mermaid.mjs   Diyagram sözdizimi (build'e bağlı)
@@ -203,6 +204,21 @@ tetiklenmez: vurgulama ve diyagramlar asenkron yüklendiği için erken bir
 Her iki durumda da: paneller, başlık çubuğu ve butonlar kâğıda
 basılmaz, koyu tema beyaza döner, kod ve tablolar kaydırma yerine sarar,
 başlıklar sayfa sonunda yalnız bırakılmaz. Dış bağlantıların adresi metne eklenir.
+
+---
+
+## Neden Java notları 11 dosya?
+
+Tek bir `JAVA.md` vardı: 5.300 satır, 193 kod bloğu, ~20.000 DOM düğümü. Açılışı
+3-4 saniye sürüyor ve arayüz donuyordu. Bölümler zaten numaralı ve bağımsız
+olduğu için konu başlıklarına ayrıldı.
+
+`scripts/split-java.mjs` bunu yapan tek seferlik araçtır ve gövde metnini
+değiştirmez: bölümleri birleştirip orijinalle karşılaştırır, fark varsa yazmadan
+çıkar. Dosya başına yalnızca bir `h1` ve çok bölümlü dosyalarda kısa bir
+içindekiler eklenir.
+
+Sonuç: en ağır dosya 4.800 DOM düğümü, dosya geçişleri 250-500 ms.
 
 ---
 

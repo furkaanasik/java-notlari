@@ -846,7 +846,7 @@ soyutlama eklemişsindir ama coupling'i azaltmamışsındır.
 ## Serinin durumu
 
 ```
-1. JAVA.md         →  dil ve çalışma zamanı
+1. Java notları    →  dil ve çalışma zamanı (10 dosya)
 2. PRINCIPLES.md   →  karar kriterleri
 3. TESTING.md      →  güvenlik ağı ve tasarım geri bildirimi
 4. REFACTORING.md  →  kokudan çözüme yol            ← buradasın

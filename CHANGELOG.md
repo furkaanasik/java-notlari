@@ -146,3 +146,33 @@ ifadesi de `(16 - 1) & spread(...)` olarak düzeltildi.
 
 Değerler `String.hashCode()` ile doğrulandı: `"Ali"` = 65918, `"Veli"` = 2662540,
 `"Ayşe"` = 2063678, `"Umut"` = hash'i yayıldığında 15'e düşüyor.
+
+
+---
+
+## İçerik yapısı — JAVA.md 11 dosyaya bölündü
+
+**Sebep:** tek dosya 5.300 satır, 193 kod bloğu ve ~20.000 DOM düğümü üretiyordu;
+açılışı 3-4 saniye sürüyor, arayüz kasıyordu. Ölçüm:
+
+| | Kod bloğu | DOM düğümü | İlk render |
+|---|---|---|---|
+| `JAVA.md` (önce) | 193 | 19.729 | 3.045 ms |
+| En ağır yeni dosya | 47 | 4.823 | ~520 ms |
+
+**Nasıl:** `scripts/split-java.mjs`. Gövde metni değiştirilmedi — script bölümleri
+tekrar birleştirip orijinalle karşılaştırıyor, en küçük fark varsa hiçbir şey
+yazmadan çıkıyor. Her dosyaya yalnızca bir `h1` ve çok bölümlü olanlara kısa bir
+içindekiler eklendi.
+
+**Dosyalar:** `content/java/` altında 01-temeller, 02-oop-temel,
+03-oop-prensipler, 04-strings, 05-exceptions, 06-arrays, 07-collections,
+08-streams, 09-jvm, 10-concurrency, 11-java21.
+
+**Etkilenen atıflar:** `JAVA.md` adını kullanan üç yer güncellendi
+(`11-flyweight.md` → `01-temeller.md — Integer Cache`; `REFACTORING.md` ve
+`TESTING.md` seri haritalarında "Java notları"). `HashMapBuckets` bileşeni
+içeriğiyle birlikte `01-temeller.md`'ye taşındı.
+
+**Menü:** `src/config/order.ts` içine `java` kategorisi eklendi ve seri sırası
+korunacak şekilde en üste alındı; dosyalar sayı ön ekiyle otomatik sıralanıyor.

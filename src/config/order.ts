@@ -9,13 +9,14 @@
  */
 
 /** Prefix'siz dosyalar için okuma sırası (dosya adı, uzantısız). */
-export const MANUAL_ORDER: string[] = ['JAVA', 'PRINCIPLES', 'TESTING', 'REFACTORING']
+export const MANUAL_ORDER: string[] = ['PRINCIPLES', 'TESTING', 'REFACTORING']
 
 /** Klasör adı → menüde görünecek kategori başlığı. */
 export const CATEGORY_LABELS: Record<string, string> = {
   '': 'Temeller',
+  java: 'Java Dili',
   patterns: 'Design Patterns',
 }
 
 /** Kategorilerin menüdeki sırası. Listede olmayan klasör sona eklenir. */
-export const CATEGORY_ORDER: string[] = ['', 'patterns']
+export const CATEGORY_ORDER: string[] = ['java', '', 'patterns']

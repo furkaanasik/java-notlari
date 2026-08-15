@@ -715,7 +715,7 @@ gerçek ağ çağrısı.
 
 ## Seride sonraki adım
 
-Buraya kadar: **JAVA.md** (dil) → **PRINCIPLES.md** (kriterler) → **TESTING.md** (kanıt).
+Buraya kadar: **Java notları** (dil) → **PRINCIPLES.md** (kriterler) → **TESTING.md** (kanıt).
 
 Sonraki durak **Design Patterns**. Oradaki her pattern'in iki sorusunu artık
 cevaplayabilecek durumdasın: *hangi prensibi uyguluyor* ve *test edilebilirliği

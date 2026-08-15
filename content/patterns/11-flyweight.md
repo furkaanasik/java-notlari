@@ -184,7 +184,7 @@ c == d;   // false — cache dışı, yeni nesne
 ```
 
 Bu davranış tam olarak Flyweight'tir ve aynı zamanda `==` ile `equals()` farkının
-neden önemli olduğunun kanıtıdır. (Bkz. JAVA.md — Integer Cache)
+neden önemli olduğunun kanıtıdır. (Bkz. 01-temeller.md — Integer Cache)
 
 ---
 
