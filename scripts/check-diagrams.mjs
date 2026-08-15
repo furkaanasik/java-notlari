@@ -33,7 +33,16 @@ const failures = []
 
 for (const title of titles) {
   await page.getByRole('button', { name: title, exact: true }).first().click()
-  await page.waitForTimeout(150)
+
+  // Gezinme artık URL üzerinden olduğu için asenkron: sabit bekleme yerine
+  // başlığın gerçekten değiştiğini doğrula. (Sabit 150ms bir önceki dosyanın
+  // diyagramlarını saydırıyordu ve toplam yanlış çıkıyordu.)
+  await page.waitForFunction(
+    (expectedTitle) => document.querySelector('header span:last-of-type')?.textContent === expectedTitle,
+    title,
+    { timeout: 10_000 },
+  )
+  await page.waitForTimeout(120)
 
   const expected = await page.locator('.mermaid, .mermaid-error').count()
   if (expected === 0) continue

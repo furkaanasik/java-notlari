@@ -1,20 +1,33 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router'
 import { docs, extractHeadings, stripManualToc } from './content/docs'
 import { CATEGORY_LABELS } from './config/order'
 import { Markdown, expandComponentMarkers } from './components/Markdown'
 import { Sidebar } from './components/Sidebar'
 import { Toc } from './components/Toc'
 import { Header } from './components/Header'
+import { SearchPalette } from './components/SearchPalette'
 import { useTheme } from './hooks/useTheme'
 
 export default function App() {
   const { theme, toggle } = useTheme()
-  const [activeSlug, setActiveSlug] = useState(docs[0]?.slug ?? '')
+  const [params, setParams] = useSearchParams()
+  const [paletteOpen, setPaletteOpen] = useState(false)
   const mainRef = useRef<HTMLElement>(null)
 
-  const doc = docs.find((d) => d.slug === activeSlug)
+  const fallbackSlug = docs[0]?.slug ?? ''
+  const requested = params.get('doc') ?? ''
+  const doc = docs.find((item) => item.slug === requested) ?? docs.find((item) => item.slug === fallbackSlug)
+  const activeSlug = doc?.slug ?? ''
 
-  // Elle yazılmış "## İçindekiler" bloğu gövdeden çıkarılır; sağ panel onun yerini alır.
+  const openDoc = useCallback(
+    (slug: string) => {
+      setParams(slug === fallbackSlug ? {} : { doc: slug })
+    },
+    [setParams, fallbackSlug],
+  )
+
+  // Elle yazılmış "## İçindekiler" gövdeden çıkarılır; sağ panel onun yerini alır.
   const body = useMemo(
     () => (doc ? expandComponentMarkers(stripManualToc(doc.source)) : ''),
     [doc],
@@ -26,6 +39,34 @@ export default function App() {
     mainRef.current?.scrollTo({ top: 0, behavior: 'auto' })
   }, [activeSlug])
 
+  // Cmd/Ctrl+K ile arama paleti.
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        // Toggle DEĞİL: aynı olay iki kez ulaşırsa (React StrictMode'da geliştirme
+        // sırasında olabiliyor) toggle kendini iptal ediyordu. Açmak idempotent.
+        setPaletteOpen(true)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  /** Aramadan gelen seçim: önce dosyayı aç, sonra ilgili başlığa kaydır. */
+  const goToResult = useCallback(
+    (slug: string, headingId: string) => {
+      openDoc(slug)
+      // Yeni doküman render edildikten sonra hedefe git.
+      window.setTimeout(() => {
+        const target = headingId ? document.getElementById(headingId) : null
+        if (target) target.scrollIntoView({ block: 'start' })
+        else mainRef.current?.scrollTo({ top: 0 })
+      }, 60)
+    },
+    [openDoc],
+  )
+
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: 'var(--c-bg-content)' }}>
       <aside
@@ -36,7 +77,7 @@ export default function App() {
           borderColor: 'var(--c-border)',
         }}
       >
-        <Sidebar activeSlug={activeSlug} onSelect={setActiveSlug} />
+        <Sidebar activeSlug={activeSlug} onSelect={openDoc} />
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -45,6 +86,7 @@ export default function App() {
           category={doc ? (CATEGORY_LABELS[doc.category] ?? doc.category) : ''}
           theme={theme}
           onToggleTheme={toggle}
+          onOpenSearch={() => setPaletteOpen(true)}
         />
 
         <div className="flex min-h-0 flex-1">
@@ -52,7 +94,7 @@ export default function App() {
             <div className="content-pad mx-auto py-12">
               {doc ? (
                 <article className="markdown">
-                  <Markdown source={body} theme={theme} onNavigate={setActiveSlug} />
+                  <Markdown source={body} theme={theme} onNavigate={openDoc} />
                 </article>
               ) : (
                 <p>Dosya bulunamadı.</p>
@@ -72,6 +114,12 @@ export default function App() {
           </aside>
         </div>
       </div>
+
+      <SearchPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        onSelect={goToResult}
+      />
     </div>
   )
 }

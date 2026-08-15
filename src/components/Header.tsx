@@ -5,9 +5,10 @@ type Props = {
   category: string
   theme: Theme
   onToggleTheme: () => void
+  onOpenSearch: () => void
 }
 
-export function Header({ title, category, theme, onToggleTheme }: Props) {
+export function Header({ title, category, theme, onToggleTheme, onOpenSearch }: Props) {
   return (
     <header
       className="sticky top-0 z-30 flex items-center justify-between border-b px-5"
@@ -38,16 +39,41 @@ export function Header({ title, category, theme, onToggleTheme }: Props) {
         </span>
       </div>
 
-      <button
-        type="button"
-        onClick={onToggleTheme}
-        aria-label={theme === 'dark' ? 'Açık temaya geç' : 'Koyu temaya geç'}
-        className="flex h-8 w-8 items-center justify-center rounded-md border transition-colors"
-        style={{ borderColor: 'var(--c-border)', color: 'var(--c-text-muted)' }}
-      >
-        {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={onOpenSearch}
+          className="flex h-8 items-center gap-2 rounded-md border px-2.5 transition-colors"
+          style={{ borderColor: 'var(--c-border)', color: 'var(--c-text-faint)' }}
+          aria-label="Ara"
+        >
+          <SearchIcon />
+          <span className="hidden sm:inline" style={{ fontSize: '0.8125rem' }}>
+            Ara
+          </span>
+          <kbd className="hidden sm:inline-block kbd">⌘K</kbd>
+        </button>
+
+        <button
+          type="button"
+          onClick={onToggleTheme}
+          aria-label={theme === 'dark' ? 'Açık temaya geç' : 'Koyu temaya geç'}
+          className="flex h-8 w-8 items-center justify-center rounded-md border transition-colors"
+          style={{ borderColor: 'var(--c-border)', color: 'var(--c-text-muted)' }}
+        >
+          {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+        </button>
+      </div>
     </header>
+  )
+}
+
+function SearchIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" />
+      <path d="M20 20l-3.5-3.5" />
+    </svg>
   )
 }
 

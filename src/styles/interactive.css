@@ -506,3 +506,120 @@
     border-top: 1px solid var(--c-border);
   }
 }
+
+/* ---------------- Arama paleti ---------------- */
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  padding: 0.05rem 0.3rem;
+  border: 1px solid var(--c-border);
+  border-radius: 4px;
+  color: var(--c-text-faint);
+}
+
+.palette {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  justify-content: center;
+  padding-top: 12vh;
+  background: oklch(0 0 0 / 0.55);
+  backdrop-filter: blur(3px);
+}
+
+.palette__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(680px, 92vw);
+  max-height: 70vh;
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  background: var(--c-bg-content);
+  box-shadow: 0 20px 60px oklch(0 0 0 / 0.4);
+  overflow: hidden;
+}
+
+.palette__input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  font-size: 0.9375rem;
+  color: var(--c-text-strong);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--c-border);
+  outline: none;
+}
+
+.palette__input::placeholder {
+  color: var(--c-text-faint);
+}
+
+.palette__count {
+  margin: 0;
+  padding: 0.4rem 1rem 0;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-text-faint);
+}
+
+.palette__list {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem;
+  overflow-y: auto;
+}
+
+.palette__hit {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.65rem;
+  border-radius: 6px;
+  border-left: 2px solid transparent;
+}
+
+.palette__hit[data-active='true'] {
+  background: var(--c-accent-quiet);
+  border-left-color: var(--c-accent);
+}
+
+.palette__hit-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  font-size: 0.8125rem;
+}
+
+.palette__hit-doc {
+  color: var(--c-text-faint);
+}
+
+.palette__sep {
+  color: var(--c-text-faint);
+}
+
+.palette__hit-heading {
+  color: var(--c-text-strong);
+  font-weight: 550;
+}
+
+.palette__hit-snippet {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--c-text-muted);
+}
+
+.palette__foot {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--c-border);
+  font-size: 0.6875rem;
+  color: var(--c-text-faint);
+}

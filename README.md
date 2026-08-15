@@ -23,6 +23,9 @@ npm run dev        # http://localhost:5173
 | `npm run check:render` | Çalışan bir sunucuya karşı gerçek tarayıcıda render doğrular |
 | `npm run shots` | Her iki temada ekran görüntüsü alır, konsol hatasında başarısız olur |
 
+Arama dizini ve interaktif bileşenler markdown'dan türetilir; `content/` değişince
+yeniden derlemek yeterlidir.
+
 `npm run build` **mermaid kontrolünü içerir**: bozuk bir diyagram derlemeyi
 kırar. `check:render` ayakta bir sunucu istediği için build'e bağlı değildir:
 
@@ -141,13 +144,22 @@ src/
 
 ---
 
+## Gezinme
+
+- **`Cmd/Ctrl+K`** komut paletini açar. Arama tüm dosyalarda tam metin çalışır ve
+  Türkçe karakter duyarsızdır: `sozlesme` yazınca `sözleşme` bulunur. Sonuçlar
+  dosya + başlık + bağlam gösterir; `↑↓` gezinir, `↵` açar, `esc` kapatır.
+- Açık dosya URL'de `?doc=patterns/07-bridge` biçiminde tutulur. Bağlantı
+  paylaşılabilir ve yenilemede korunur. Yol yerine sorgu parametresi kullanılır:
+  böylece sunucuda yönlendirme kuralı gerekmez ve `#başlık` çapaları serbest kalır.
+
+---
+
 ## Henüz yapılmadı
 
-- Arama (`Cmd/Ctrl+K` komut paleti)
-- Router — şu an URL dosyaya göre değişmiyor, bağlantı paylaşılamıyor
 - Çapraz atıf bağlantıları (metindeki `PRINCIPLES.md` gibi adların linke dönmesi)
 - Okuma ilerlemesi ve okundu işaretleri
 - Klavye navigasyonu (`j/k`, `n/p`)
 - Yazdırma / PDF için baskı stilleri
-- Kalan interaktif bileşenler: SmellMap, HashMapBuckets, DecoratorChain
-- Paket bölme — ana paket şu an ~850 kB (gzip ~268 kB)
+- Kalan interaktif bileşenler: HashMapBuckets, DecoratorChain
+- Paket bölme — ana paket şu an ~950 kB (gzip ~300 kB)
