@@ -61,7 +61,7 @@ değiştirirse hepsi etkilenir. (Bkz. PRINCIPLES.md — Immutability)
 ```mermaid
 classDiagram
     class FlyweightFactory {
-        -cache: Map~Key, Flyweight~
+        -cache: Map
         +getFlyweight(key) Flyweight
     }
     class Flyweight {
@@ -145,8 +145,9 @@ ParticleType bullet = ParticleTypeFactory.get("bullet.png", Color.RED);
 for (int i = 0; i < 1_000_000; i++) {
     particles.add(new Particle(rx(), ry(), vx(), vy(), bullet));
 }
-// 1.000.000 × 8 byte referans + 1 × 4 KB doku
-// 4 GB yerine ~40 MB
+// Doku artık 1 milyon kez değil, 1 kez tutuluyor:
+// 1.000.000 × (nesne başlığı + 4 double + 1 referans) + 1 × 4 KB doku
+// GB mertebesinden onlarca MB mertebesine iner
 ```
 
 ### Thread-safety uyarısı
@@ -183,7 +184,7 @@ c == d;   // false — cache dışı, yeni nesne
 ```
 
 Bu davranış tam olarak Flyweight'tir ve aynı zamanda `==` ile `equals()` farkının
-neden önemli olduğunun kanıtıdır. (Bkz. JAVA.md — Integer cache)
+neden önemli olduğunun kanıtıdır. (Bkz. JAVA.md — Integer Cache)
 
 ---
 

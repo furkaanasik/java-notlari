@@ -91,6 +91,13 @@ classDiagram
 
 ```mermaid
 classDiagram
+    class Target {
+        <<interface>>
+        +request()
+    }
+    class Adaptee {
+        +specificRequest()
+    }
     class ObjectAdapter {
         -adaptee: Adaptee
         +request()
@@ -98,9 +105,11 @@ classDiagram
     class ClassAdapter {
         +request()
     }
+
+    Target <|.. ObjectAdapter
+    Target <|.. ClassAdapter
     Adaptee <-- ObjectAdapter : composition
     Adaptee <|-- ClassAdapter : inheritance
-    Target <|.. ClassAdapter
 ```
 
 | | Object Adapter | Class Adapter |
@@ -259,4 +268,4 @@ Bridge     → "iki eksen bağımsız değişecek" → ayır
 - **SRP** — çeviri sorumluluğu tek bir sınıfta toplanır
 - **OCP** — yeni sağlayıcı = yeni adapter; mevcut kod değişmez
 - **Test edilebilirlik** — istemci testinde tuhaf üçüncü parti imzalar yerine kendi
-  arayüzünü mock'larsın (Bkz. TESTING.md)
+  arayüzünü mock'larsın (Bkz. TESTING.md — Mock ne zaman tasarım kokusudur)

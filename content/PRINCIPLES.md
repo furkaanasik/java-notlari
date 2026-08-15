@@ -836,7 +836,8 @@ Ve bunun üstünde tek bir kural var:
 
 ## Sonraki adımlar
 
-- **Design Patterns serisi** — bu prensiplerin somut uygulamaları (23 GoF pattern)
+- **Design Patterns serisi** — bu prensiplerin somut uygulamaları
+  (23 GoF pattern; şu an Creational ve Structural olmak üzere 12'si hazır)
 - **Mimari pattern'ler** — Hexagonal, CQRS, Saga, Event Sourcing
 - **Refactoring katalogu** — kokudan çözüme haritalama (Extract Method, Replace Conditional
   with Polymorphism, Introduce Parameter Object)

@@ -8,6 +8,7 @@ Java programlama dilinin temel yapı taşlarından modern özelliklerine kadar g
 
 **Temel Java**
 - [1. Wrapper Class ve Primitive Farkı](#1-wrapper-class-ve-primitive-farkı)
+  - [Integer Cache](#integer-cache)
 - [2. Java 9 Modülerlik Sistemi (JPMS)](#2-java-9-modülerlik-sistemi-jpms)
 - [3. Veri Yönetimi ve Bellek Mekanizmaları](#3-veri-yönetimi-ve-bellek-mekanizmaları)
   - Stack ve Heap, Pass-By-Value, Immutability, Overflow
@@ -90,7 +91,9 @@ Integer x = 5;   // autoboxing  → int otomatik Integer'a dönüşür
 int y = x;       // unboxing    → Integer otomatik int'e dönüşür
 ```
 
-**Mülakat tuzağı — Integer Cache:**
+### Integer Cache
+
+Mülakat tuzağı:
 
 ```java
 Integer a = 127;
@@ -251,10 +254,15 @@ map.put("Veli", 30);
 map.put("Ayşe", 28);
 ```
 
+Aşağıdaki şemada bucket indeksi `% 16` ile gösteriliyor — bu sadece anlatım kolaylığı.
+Gerçekte HashMap `%` kullanmaz: önce hash'i yayar (`h ^ (h >>> 16)`), sonra
+`(n - 1) & hash` ile indeksi bulur. `%` negatif hash'te negatif indeks üretirdi,
+`&` üretmez.
+
 ```
-"Ali".hashCode() % 16  = 5  → Bucket[5]
-"Veli".hashCode() % 16 = 9  → Bucket[9]
-"Ayşe".hashCode() % 16 = 2  → Bucket[2]
+"Ali".hashCode()  → Bucket[5]
+"Veli".hashCode() → Bucket[9]
+"Ayşe".hashCode() → Bucket[2]
 
 Bucket[0]  → boş
 Bucket[2]  → "Ayşe" → 28
@@ -293,7 +301,11 @@ map.put("Abc", 99);   // → Bucket[5]  ÇAKIŞMA!
 |---|---|
 | Collision yok | O(1) |
 | Collision var, LinkedList | O(n) |
-| Collision var, TreeMap (Java 8+, 8+ eleman) | O(log n) |
+| Collision var, red-black tree (Java 8+) | O(log n) |
+
+Ağaca dönüşüm (treeify) için iki koşul birden gerekir: bucket'ta **≥ 8 eleman**
+**ve** tablo kapasitesi **≥ 64**. Kapasite küçükse HashMap ağaca çevirmek yerine
+tabloyu büyütür. Kullanılan yapı `TreeMap` değil, HashMap'in kendi `TreeNode`'udur.
 
 ### `hashCode()` Sözleşmesi
 
@@ -352,8 +364,12 @@ public int hashCode() {
 User user = new User("Ali");
 System.out.println(user.hashCode()); // 1829164700
 System.out.println(user);            // User@6d06d69c
-// 1829164700 (decimal) = 6d06d69c (hex) — override edilmezse adresten türetilir
-// Override edilince artık adresle hiçbir ilgisi kalmaz
+// 1829164700 (decimal) = 6d06d69c (hex) — toString() aynı değeri hex yazar
+//
+// Yaygın yanılgı: bu değer nesnenin bellek adresi DEĞİLDİR. HotSpot varsayılan
+// olarak nesneye özel, thread-local bir üreticiden gelen kimlik değeri kullanır
+// (-XX:hashCode ile stratejisi değiştirilebilir). GC nesneyi taşısa bile değer sabit kalır.
+// Override edilince zaten tamamen içerikten türetilir.
 ```
 
 ---
@@ -1121,15 +1137,21 @@ public class AppConstants {
 ### 5. Kanonik Sıralama (JLS)
 
 ```java
-// Doğru sıralama:
-// 1. Anotasyon  2. Erişim belirleyici  3. static  4. final  5. Diğerleri
+// Önerilen sıra: 1. Anotasyon  2. Erişim belirleyici  3. static  4. final  5. Diğerleri
 
+// Alan
+private static final int MAX = 100;
+
+// Metod
 @Override
-public static final int MAX = 100;
+public void describe() { }
 
-// ❌ Yanlış
-static public final int MAX = 100;
+// Aşağıdaki de DERLENİR — sadece konvansiyona aykırıdır, hata değildir:
+static private final int MAX2 = 100;
 ```
+
+> İki tuzak: `@Override` sadece metoda konulabilir (alanda derleme hatası),
+> ve `static` metod override edilemez — `@Override public static` diye bir şey yoktur.
 
 ---
 
@@ -1455,8 +1477,9 @@ calc.add(1, 2);     // int versiyonu — derleme zamanında belli
 calc.add(1.0, 2.0); // double versiyonu
 calc.add("a", "b"); // String versiyonu
 
-// Type promotion — uygun tip yoksa otomatik yükseltme
-calc.add(1, 2L);    // int → long'a yükseltilir
+// Type promotion — birebir uyan overload yoksa argümanlar genişletilir
+calc.add(1, 2L);    // (long,long) overload'ı YOK → ikisi de double'a genişler,
+                    // add(double, double) çalışır ve 3.0 döner
 ```
 
 #### Overriding — çalışma zamanı (Dynamic Binding)
@@ -2296,6 +2319,17 @@ public final class Square extends Rectangle {
 }
 ```
 
+**İki zorunlu kısıt:**
+
+1. `permits` listesindeki her alt sınıf `final`, `sealed` veya `non-sealed`
+   olmak **zorundadır** — üçünden birini yazmazsan derlenmez.
+2. Alt sınıflar, sealed sınıfla **aynı modülde** (adlandırılmış modül yoksa
+   **aynı pakette**) olmalıdır. Pratikte en sık alınan derleme hatası budur:
+   `Shape` ile `Circle` farklı paketlerdeyse `permits` çalışmaz.
+
+Aynı dosyada tanımlıyorsan `permits` yazmayı atlayabilirsin; derleyici alt
+tipleri kendisi çıkarır.
+
 ---
 
 #### Switch Pattern Matching ile — En Güçlü Kullanım
@@ -2368,6 +2402,11 @@ for (Method method : clazz.getDeclaredMethods()) {
 ---
 
 #### Private Alana Erişim ve Metod Çağırma
+
+Aşağıdaki reflection çağrılarının hepsi checked exception fırlatır
+(`NoSuchFieldException`, `NoSuchMethodException`, `IllegalAccessException`,
+`InvocationTargetException`, `InstantiationException`). Örnek kısa kalsın diye
+gösterilmiyor; gerçek kodda `throws` veya `try-catch` şart.
 
 ```java
 User user = new User("Ali", 25);
@@ -3034,14 +3073,16 @@ public class Parent {
     public void process() throws IOException { }
 }
 
+// Aşağıdakiler AYRI AYRI alternatiflerdir — hepsi tek sınıfta olamaz
+// (aynı imza iki kez tanımlanamaz).
 public class Child extends Parent {
     @Override
-    public void process() throws IOException { }         // ✅ aynı
-    public void process() throws FileNotFoundException { } // ✅ daha spesifik
-    public void process() { }                            // ✅ hiç yok
-    public void process() throws SQLException { }        // ❌ farklı checked!
-    public void process() throws Exception { }           // ❌ daha genel!
-    public void process() throws RuntimeException { }    // ✅ unchecked — serbest
+    public void process() throws IOException { }             // ✅ aynı
+    // public void process() throws FileNotFoundException { } // ✅ daha spesifik
+    // public void process() { }                              // ✅ hiç yok
+    // public void process() throws SQLException { }          // ❌ farklı checked!
+    // public void process() throws Exception { }             // ❌ daha genel!
+    // public void process() throws RuntimeException { }      // ✅ unchecked — serbest
 }
 ```
 
@@ -3188,18 +3229,31 @@ try {
     // IO hatası
 }
 
-// ❌ 3. Flow control için kullanmak
-try {
-    int value = Integer.parseInt(input);
-} catch (NumberFormatException e) {
-    value = 0; // yavaş ve yanlış!
+// ❌ 3. Exception'ı normal akış için kullanmak
+//    (beklenen, sık yaşanan bir durumu exception ile yönetmek)
+public boolean isAdmin(User u) {
+    try {
+        return u.getRoles().contains("ADMIN");
+    } catch (NullPointerException e) {
+        return false;   // null kontrolü yerine exception — yavaş ve niyeti gizler
+    }
 }
 
-// ✅ Önce kontrol et
-if (input.matches("\\d+")) {
-    int value = Integer.parseInt(input);
-} else {
-    int value = 0;
+// ✅ Beklenen durumu koşulla yönet
+public boolean isAdmin(User u) {
+    return u != null && u.getRoles() != null && u.getRoles().contains("ADMIN");
+}
+
+// Nüans: parse işlemi bunun İSTİSNASIDIR. Girdinin sayı olup olmadığını
+// exception'sız anlamanın güvenilir yolu yoktur — regex taşmayı yakalamaz
+// ("99999999999" regex'i geçer, parseInt yine patlar). Burada try-catch doğru
+// araçtır; sadece sonucu tek yerde topla:
+public static int parseOrDefault(String input, int fallback) {
+    try {
+        return Integer.parseInt(input);
+    } catch (NumberFormatException e) {
+        return fallback;
+    }
 }
 
 // ❌ 4. finally içinde return/throw
@@ -4222,13 +4276,16 @@ Map<String, Integer> nameLength = names.stream()
     ));
 
 // toMap — duplicate key collision
-List<String> withDups = List.of("Ali", "Veli", "Al");
+// "Ali" ve "Ada" aynı uzunlukta (3) → aynı key. Merge fonksiyonu YOKSA
+// IllegalStateException: Duplicate key fırlatılır.
+List<String> withDups = List.of("Ali", "Ada", "Veli");
 Map<Integer, String> byLength = withDups.stream()
     .collect(Collectors.toMap(
         String::length,
         name -> name,
         (existing, replacement) -> existing // collision — eskiyi tut
     ));
+System.out.println(byLength); // {3=Ali, 4=Veli}  ← "Ada" elendi, "Ali" kaldı
 ```
 
 ---
@@ -4267,7 +4324,7 @@ Optional<String> first = names.stream()
     .findFirst();
 System.out.println(first.get()); // Ali
 
-boolean anyLong  = names.stream().anyMatch(n -> n.length() > 4);   // true
+boolean anyLong  = names.stream().anyMatch(n -> n.length() > 3);   // true — "Veli" ve "Ayşe"
 boolean allShort = names.stream().allMatch(n -> n.length() < 6);   // true
 boolean noneLong = names.stream().noneMatch(n -> n.length() > 10); // true
 ```
@@ -4423,9 +4480,15 @@ list.stream().count();                      // ✅
 // - Thread-safe olmayan koleksiyonlar
 // - Sıra önemli
 
+// DİKKAT: IntStream.sum() int döner. 1..1_000_000 toplamı 500_000_500_000,
+// int'e sığmaz ve sessizce taşar — sonucu long değişkene atamak bunu ÇÖZMEZ.
+int overflowed = IntStream.rangeClosed(1, 1_000_000).parallel().sum(); // ❌ taşar
+
+// ✅ Toplamı long olarak biriktir
 long sum = IntStream.rangeClosed(1, 1_000_000)
     .parallel()
-    .sum();
+    .asLongStream()
+    .sum(); // 500000500000
 
 // forEachOrdered — sırayı korur ama yavaş
 List.of(1, 2, 3, 4, 5).parallelStream()
@@ -4473,7 +4536,6 @@ JDK (Java Development Kit)
 ├── jar
 └── JRE (Java Runtime Environment)
     ├── Çekirdek sınıflar (java.lang, java.util vb.)
-    ├── rt.jar
     └── JVM (Java Virtual Machine)
         ├── Class Loader Subsystem
         ├── Runtime Data Areas
@@ -4491,6 +4553,11 @@ JDK (Java Development Kit)
 - **JDK** → Geliştirmek için (yaz + derle + çalıştır)
 - **JRE** → Çalıştırmak için (sadece çalıştır)
 - **JVM** → Bytecode'u çalıştıran sanal makine
+
+> Yukarıdaki şema Java 8 ve öncesinin klasik anlatımıdır. Java 9 ile modüler
+> runtime image'a geçildi: tek parça `rt.jar` kaldırıldı, çekirdek sınıflar
+> `jmod`/`jimage` biçiminde tutuluyor ve `jlink` ile uygulamaya özel küçük bir
+> runtime üretilebiliyor. Kavramsal JDK ⊃ JRE ⊃ JVM ilişkisi aynı kalır.
 
 ---
 
@@ -4770,7 +4837,9 @@ public void causeSOF() {
 #### finalize() — Neden Kullanma
 
 ```java
-// ❌ finalize() — deprecated Java 9+, Java 18'de kaldırıldı
+// ❌ finalize() — Java 9'da deprecated, Java 18'de (JEP 421) kaldırılmak üzere
+//    işaretlendi ve --finalization=disabled ile devre dışı bırakılabilir hâle geldi;
+//    ileride varsayılan kapalı olacak ve sonraki bir sürümde kaldırılacak.
 public class BadExample {
     @Override
     protected void finalize() throws Throwable {
@@ -4982,10 +5051,25 @@ public class DeadlockExample {
 public void methodA() { synchronized (lock1) { synchronized (lock2) { /* ... */ } } }
 public void methodB() { synchronized (lock1) { synchronized (lock2) { /* ... */ } } }
 
-// ✅ Çözüm 2: tryLock ile timeout
-boolean got1 = lock1.tryLock(1, TimeUnit.SECONDS);
-boolean got2 = lock2.tryLock(1, TimeUnit.SECONDS);
-if (!got1 || !got2) { /* geri çekil ve tekrar dene */ }
+// ✅ Çözüm 2: tryLock ile timeout — ReentrantLock gerektirir!
+// (Yukarıdaki Object monitörlerinde tryLock yoktur.)
+private final ReentrantLock lock1 = new ReentrantLock();
+private final ReentrantLock lock2 = new ReentrantLock();
+
+public void transfer() throws InterruptedException {
+    boolean got1 = false, got2 = false;
+    try {
+        got1 = lock1.tryLock(1, TimeUnit.SECONDS);
+        got2 = lock2.tryLock(1, TimeUnit.SECONDS);
+        if (got1 && got2) {
+            // iş
+        }
+        // ikisini birden alamadıysan geri çekil ve tekrar dene
+    } finally {
+        if (got2) lock2.unlock();
+        if (got1) lock1.unlock();
+    }
+}
 ```
 
 ---
@@ -5084,7 +5168,9 @@ CompletableFuture.supplyAsync(() -> heavyWork(), executor)
 // ❌ HashMap — thread-safe değil
 Map<String, Integer> map = new HashMap<>(); // multi-thread'de veri kaybı/corruption
 
-// ✅ ConcurrentHashMap — segment bazlı lock, yüksek performans
+// ✅ ConcurrentHashMap — Java 8+ bucket bazlı: boş bucket'a CAS ile ekleme,
+//    dolu bucket'ta o bucket'ın ilk node'u üzerinde synchronized.
+//    (Java 7'deki "segment" yapısı kaldırıldı — granülarite artık çok daha ince.)
 Map<String, Integer> safeMap = new ConcurrentHashMap<>();
 safeMap.put("a", 1);
 safeMap.computeIfAbsent("b", k -> 2); // atomik!

@@ -848,9 +848,9 @@ soyutlama eklemişsindir ama coupling'i azaltmamışsındır.
 2. PRINCIPLES.md   →  karar kriterleri
 3. TESTING.md      →  güvenlik ağı ve tasarım geri bildirimi
 4. REFACTORING.md  →  kokudan çözüme yol            ← buradasın
-5. Design Patterns →  isimlendirilmiş hedef çözümler
-6. SPRING-BOOT.md  →  framework
-7. Mimari          →  Hexagonal, CQRS, Saga, Event Sourcing
+5. Design Patterns →  isimlendirilmiş hedef çözümler (12/23 hazır)
+6. Spring Boot     →  framework                     (planlanan)
+7. Mimari          →  Hexagonal, CQRS, Saga, Event Sourcing (planlanan)
 ```
 
 Bir sonraki dosyada göreceğin pattern'lerin çoğu, bu dosyadaki bir refactoring'in

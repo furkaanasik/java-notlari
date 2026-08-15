@@ -1,6 +1,8 @@
 # Factory Method
 
-> Nesne yaratma işini bir metoda hapset, hangi somut sınıfın döneceği kararını alt sınıfa (veya konfigürasyona) bırak.
+> **Amaç:** Nesne yaratma işini bir metoda hapsetmek; hangi somut sınıfın döneceği
+> kararını alt sınıfa (veya konfigürasyona) bırakmak.
+> **Kategori:** Creational
 
 ---
 
@@ -189,7 +191,7 @@ PaymentResult result = payment.process(request.getAmount());
 
 ---
 
-## 6. Ne zaman kullanma
+## 6. Ne zaman kullanılmaz
 
 - **Tek implementasyon varsa.** `UserServiceFactory` yazıp tek `UserServiceImpl` döndürmek boş katman. İkinci implementasyon gerçekten geldiğinde ekle.
 - **Karar derleme zamanında belliyse.** Tip sabitse `new` yaz, geç.
@@ -198,7 +200,7 @@ PaymentResult result = payment.process(request.getAmount());
 
 ---
 
-## 7. Karışanlar
+## 7. İlgili ve karıştırılan pattern'ler
 
 | Pattern | Fark |
 |---|---|
@@ -206,6 +208,16 @@ PaymentResult result = payment.process(request.getAmount());
 | **Builder** | Factory "hangi sınıf?" sorusunu çözer. Builder "bu nesneyi 12 parametreyle nasıl okunur şekilde kurarım?" sorusunu çözer. |
 | **Strategy** | Yapısal olarak çok benzer, niyet farklı. Factory bir **nesne döndürür**. Strategy bir **algoritmayı çalıştırır**. Factory'nin döndürdüğü şey çoğu zaman bir Strategy'dir — ikisi birlikte çalışır. |
 | **Template Method** | Klasik Factory Method aslında Template Method'un özel halidir: üst sınıf akışı sabitler, alt sınıf tek bir adımı (yaratmayı) doldurur. |
+
+---
+
+## Prensip bağlantısı
+
+- **OCP** — yeni ürün tipi = yeni sınıf; mevcut factory ve istemci kodu değişmez
+- **DIP** — istemci `Payment` arayüzüne bağlanır, `CreditCardPayment`'a değil
+- **SRP** — "hangi nesne yaratılacak" kararı tek bir sınıfta toplanır
+- **Test edilebilirlik** — testte sahte bir factory verilerek gerçek ödeme
+  sağlayıcısına hiç gidilmez (Bkz. TESTING.md — Mock ne zaman tasarım kokusudur)
 
 ---
 

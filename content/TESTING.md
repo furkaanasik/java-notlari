@@ -592,7 +592,8 @@ piramidin ortasında kalmalıdır. Etiketleyip (`@Tag("integration")`) ayrı ça
 yaygın pratiktir.
 
 > Framework'e özgü test araçları (Spring test slice'ları, `@DataJpaTest`,
-> `@WebMvcTest`, `MockMvc`) SPRING-BOOT.md dosyasına aittir; burada kasıtlı olarak yok.
+> `@WebMvcTest`, `MockMvc`) bu dosyanın kapsamı dışındadır; seride **planlanan**
+> Spring Boot dosyasına aittir (henüz yazılmadı).
 
 ---
 

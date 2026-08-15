@@ -1,6 +1,8 @@
 # Prototype
 
-> Nesneyi sıfırdan kurmak pahalıysa veya somut sınıfını bilmiyorsan, var olanı klonla.
+> **Amaç:** Nesneyi sıfırdan kurmak pahalıysa veya somut sınıfını bilmiyorsan,
+> var olanı klonlayarak yenisini üretmek.
+> **Kategori:** Creational
 
 ---
 
@@ -68,7 +70,7 @@ classDiagram
         +copy() ScheduledReportTemplate
     }
     class PrototypeRegistry {
-        -Map~String, Prototype~ prototypes
+        -prototypes: Map
         +register(key, prototype)
         +get(key) Prototype
     }
@@ -210,7 +212,7 @@ ReportTemplate copy = mapper.readValue(mapper.writeValueAsString(original), Repo
 
 ---
 
-## 6. Ne zaman kullanma
+## 6. Ne zaman kullanılmaz
 
 - **Nesne immutable ise.** Kopyalamaya gerek yok, paylaş geç. Record'lar, `String`, `LocalDate`.
 - **Kurulum ucuzsa.** `new` 3 satırsa builder/factory yeter, klonlama makinesi kurma.
@@ -220,7 +222,7 @@ ReportTemplate copy = mapper.readValue(mapper.writeValueAsString(original), Repo
 
 ---
 
-## 7. Karışanlar
+## 7. İlgili ve karıştırılan pattern'ler
 
 | Pattern | Fark |
 |---|---|
@@ -228,6 +230,18 @@ ReportTemplate copy = mapper.readValue(mapper.writeValueAsString(original), Repo
 | **Builder** | Builder parçalardan kurar. Prototype hazır olanı çoğaltır. `toBuilder()` ikisinin melezidir. |
 | **Memento** | Memento da state'in kopyasını alır ama amacı **geri yükleme**dir ve kopya dışarıya kapalıdır. Prototype'ın kopyası yeni bağımsız bir nesnedir. |
 | **Flyweight** | Tam zıttı. Flyweight nesneleri **paylaştırarak** bellek kazanır, Prototype **çoğaltır**. |
+
+---
+
+## Prensip bağlantısı
+
+- **Encapsulation** — kopyalama nesnenin kendi içinde yapılır; private alanlara
+  dışarıdan erişme ihtiyacı ortadan kalkar
+- **DIP** — istemci `Prototype` arayüzüne bakar, somut sınıfı bilmez
+- **Immutability** — nesne zaten immutable ise bu pattern gereksizdir; paylaşmak
+  yeterlidir (Bkz. PRINCIPLES.md — Immutability)
+- **LSP** — `copy()` gerçek çalışma zamanı tipini döndürmelidir; üst tipe düşen
+  bir kopya sözleşmeyi bozar
 
 ---
 

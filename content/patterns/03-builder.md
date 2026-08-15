@@ -1,6 +1,8 @@
 # Builder
 
-> Çok parametreli veya adım adım kurulan nesneyi, okunabilir ve geçersiz duruma düşmeyecek şekilde inşa et.
+> **Amaç:** Çok parametreli veya adım adım kurulan nesneyi, okunabilir ve geçersiz
+> duruma düşmeyecek şekilde inşa etmek.
+> **Kategori:** Creational
 
 ---
 
@@ -72,7 +74,7 @@ classDiagram
         -HttpMethod method
         -String body
         -Map headers
-        +builder()$ Builder
+        +builder() Builder$
     }
     class Builder {
         -String url
@@ -87,7 +89,7 @@ classDiagram
     }
     class Client
 
-    HttpRequest +.. Builder : static nested
+    HttpRequest *-- Builder : static nested
     Builder ..> HttpRequest : builds
     Client --> Builder
 ```
@@ -230,7 +232,7 @@ Record compact constructor doğrulamayı zaten veriyor. Builder'ı **alan sayıs
 
 ---
 
-## 6. Ne zaman kullanma
+## 6. Ne zaman kullanılmaz
 
 - **Alan sayısı 3-4 ise.** `new Point(x, y)` için builder yazmak gürültü.
 - **Tüm alanlar zorunluysa.** Builder'ın gücü opsiyonellikten gelir. Hepsi zorunluysa constructor daha güvenli — derleyici eksik alanı yakalar, builder yakalayamaz (runtime'a kalır).
@@ -239,7 +241,7 @@ Record compact constructor doğrulamayı zaten veriyor. Builder'ı **alan sayıs
 
 ---
 
-## 7. Karışanlar
+## 7. İlgili ve karıştırılan pattern'ler
 
 | Pattern | Fark |
 |---|---|
@@ -247,6 +249,17 @@ Record compact constructor doğrulamayı zaten veriyor. Builder'ı **alan sayıs
 | **Prototype** | Builder sıfırdan kurar. Prototype var olanı kopyalayıp üstünde oynar. Builder'a `from(existing)` metodu eklemek ikisini birleştirir (`toBuilder = true` Lombok'ta). |
 | **Fluent API** | Her fluent API builder değildir. `Stream.filter().map()` fluent ama pipeline'dır, nesne inşa etmez. |
 | **Composite** | Builder karmaşık ağaç yapıları kurarken sık sık Composite üretir (örn. HTML DOM builder). Birlikte çalışırlar. |
+
+---
+
+## Prensip bağlantısı
+
+- **Immutability** — ürün `final` alanlı ve setter'sız kalabilir; builder mutasyonu
+  kendi üstüne alır (Bkz. PRINCIPLES.md — Immutability)
+- **Fail Fast** — `build()` içindeki doğrulama, geçersiz nesnenin doğmasını engeller
+- **SRP** — "nesneyi kurma" sorumluluğu üründen ayrılır
+- **PoLA** — isimli adımlar sayesinde çağrı noktası kendini açıklar; `true, false`
+  gibi anlamsız argümanlar kalmaz
 
 ---
 

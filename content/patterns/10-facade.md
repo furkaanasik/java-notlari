@@ -14,7 +14,8 @@ gerekiyor. Bu bilgi her çağıranda tekrarlanıyor.
 public class CheckoutController {
 
     public void checkout(Long orderId) {
-        Order order = orderRepository.findById(orderId);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
 
         inventoryService.reserve(order.getItems());
         BigDecimal tax = taxCalculator.calculate(order, order.getCustomer().getRegion());
@@ -43,7 +44,7 @@ Sorunlar:
   bunu kaçırır
 - Aynı akış mobil API'de, admin panelinde, batch işinde tekrarlanır
 - Alt sistemlerden biri değişince tüm çağıranlar değişir (Shotgun Surgery)
-- Test etmek için 8 mock gerekiyor (Bkz. TESTING.md — mock sayısı koku ölçer)
+- Test etmek için 8 mock gerekiyor (Bkz. TESTING.md — Mock ne zaman tasarım kokusudur)
 
 ---
 

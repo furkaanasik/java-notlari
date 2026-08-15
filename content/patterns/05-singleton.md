@@ -1,6 +1,7 @@
 # Singleton
 
-> Bir sınıftan tek instance olmasını garanti et ve ona global erişim ver.
+> **Amaç:** Bir sınıftan tek instance olmasını garanti etmek ve ona global erişim vermek.
+> **Kategori:** Creational
 >
 > **Ve muhtemelen buna ihtiyacın yok.** Bu dosyanın yarısı neden kullanmaman gerektiği hakkında.
 
@@ -143,9 +144,9 @@ Enum'da JVM bunu engeller. Dezavantajı: lazy değil ve sınıf genişletemez.
 ```mermaid
 classDiagram
     class Singleton {
-        -static Singleton instance
+        -instance: Singleton$
         -Singleton()
-        +static getInstance() Singleton
+        +getInstance() Singleton$
         +doWork()
     }
     class ClientA
@@ -266,7 +267,7 @@ Kesin kullanma:
 
 ---
 
-## 8. Karışanlar
+## 8. İlgili ve karıştırılan pattern'ler
 
 | Pattern / kavram | Fark |
 |---|---|
@@ -275,6 +276,21 @@ Kesin kullanma:
 | **Factory** | Factory nesne üretir (çoğu zaman yenisini). Singleton hep aynısını verir. `getInstance()` bir Factory Method'dur aslında. |
 | **Spring singleton scope** | Container başına tek, JVM başına değil. Ve bağımlılık enjekte edilir, çekilmez. Kavramsal olarak farklı şeydir. |
 | **Object Pool** | Sınırlı sayıda (1 değil, N) instance yönetir, ödünç verir ve geri alır. |
+
+---
+
+## Prensip bağlantısı
+
+Bu pattern, prensipleri **uygulamaktan çok ihlal ettiği için** öğreticidir:
+
+- **DIP ihlali** — bağımlılık enjekte edilmez, içeriden çekilir; imzada görünmez
+- **SRP ihlali** — sınıf hem kendi işini yapar hem kendi yaşam döngüsünü yönetir
+- **Test edilebilirlik** — gizli bağımlılık mock'lanamaz
+  (Bkz. TESTING.md — Mock ne zaman tasarım kokusudur)
+- **Immutability** — pattern yalnızca state'siz/immutable durumda savunulabilir;
+  mutable global state en tehlikeli hâlidir
+- **Encapsulation** — `private` constructor doğru bir araçtır; sorun erişimin
+  global olmasıdır, kurulumun gizlenmesi değil
 
 ---
 

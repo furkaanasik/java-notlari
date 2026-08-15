@@ -1,6 +1,8 @@
 # Abstract Factory
 
-> Birbiriyle **uyumlu olmak zorunda olan** nesne ailelerini tek bir fabrikadan yarat, böylece karıştırmak imkânsız olsun.
+> **Amaç:** Birbiriyle **uyumlu olmak zorunda olan** nesne ailelerini tek bir
+> fabrikadan yaratmak; böylece karıştırmayı imkânsız kılmak.
+> **Kategori:** Creational
 
 ---
 
@@ -177,7 +179,7 @@ JDBC örneği en öğreticisi: `Connection`'ı GoF diyagramı olarak düşünmem
 
 ---
 
-## 6. Ne zaman kullanma
+## 6. Ne zaman kullanılmaz
 
 - **Tek bir ürün varsa.** Aile yoksa Abstract Factory yok, Factory Method yeter.
 - **Ürün tipleri sık değişiyorsa.** Yeni bir `Footer` eklemek istediğinde tüm fabrikaları açıp değiştirmen gerekir. Aileler sabit, ürünler değişken bir dünyadaysan bu pattern seni yavaşlatır.
@@ -186,7 +188,7 @@ JDBC örneği en öğreticisi: `Connection`'ı GoF diyagramı olarak düşünmem
 
 ---
 
-## 7. Karışanlar
+## 7. İlgili ve karıştırılan pattern'ler
 
 | Pattern | Fark |
 |---|---|
@@ -194,6 +196,17 @@ JDBC örneği en öğreticisi: `Connection`'ı GoF diyagramı olarak düşünmem
 | **Builder** | Abstract Factory ürünü **hemen** döner. Builder adım adım kurar ve sonunda döner. Builder tek karmaşık nesneye, Abstract Factory birden çok basit nesneye odaklanır. |
 | **Prototype** | Abstract Factory sınıf hiyerarşisine dayanır. Prototype klonlamaya dayanır — yeni "aile" eklemek için sınıf yazman gerekmez. |
 | **Bridge** | Yapıları benzer görünür. Bridge bir soyutlamayı bir implementasyona bağlar; Abstract Factory uyumlu nesne setleri üretir. Bridge'in implementasyon tarafını kurmak için sık sık Abstract Factory kullanılır. |
+
+---
+
+## Prensip bağlantısı
+
+- **OCP** — yeni aile = yeni fabrika sınıfı; istemci kodu değişmez
+  (ama yeni **ürün tipi** eklemek tüm fabrikaları açtırır — pattern'in bilinen kısıtı)
+- **DIP** — `ReportBuilder` soyut fabrikaya bağlıdır, `PdfReportFactory`'ye değil
+- **Encapsulation** — "hangi ürünler birbirine uyar" kuralı yapının içine gömülür,
+  geliştiricinin dikkatine bırakılmaz
+- **Test edilebilirlik** — tek bir sahte fabrika, tüm akışı I/O'suz test etmeye yeter
 
 ---
 
