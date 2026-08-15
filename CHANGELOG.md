@@ -82,12 +82,15 @@ commit'lerin kapsamı dışındadır.
 |---|---|---|
 | `03-builder.md` | `HttpRequest +.. Builder` — geçersiz operatör, **tüm diyagram parse hatası veriyordu** | `HttpRequest *-- Builder` |
 | `03-builder.md` | `+builder()$ Builder` — static sınıflandırıcı yanlış konumda | `+builder() Builder$` |
-| `04-prototype.md` | `-Map~String, Prototype~ prototypes` — virgüllü generic kırılgan | `-prototypes: Map` |
-| `11-flyweight.md` | `-cache: Map~Key, Flyweight~` | `-cache: Map` |
+| `04-prototype.md` | `-Map~String, Prototype~ prototypes` — generic içindeki boşluk | `-prototypes: Map~String,Prototype~` |
+| `11-flyweight.md` | `-cache: Map~Key, Flyweight~` | `-cache: Map~Key,Flyweight~` |
 | `05-singleton.md` | `-static Singleton instance` — `static` tip adının parçası sanılıyordu | `-instance: Singleton$`, `+getInstance() Singleton$` |
 | `06-adapter.md` | İkinci diyagramda `Target`/`Adaptee` tanımsız kullanılıyordu, yarım render oluyordu | Sınıflar bu blokta da tanımlandı |
 
-> Not: Bu düzeltmeler mermaid sözdizimi kurallarına göre yapıldı ancak **henüz canlı render ile doğrulanmadı** — mermaid paketi FAZ 2'de kurulacak. 13 diyagramın tamamı önyüz ayağa kalkar kalkmaz render testinden geçirilecek.
+> Doğrulandı: 13 diyagramın tamamı gerçek tarayıcıda render ediliyor
+> (`npm run check:render`). Ayrıca `npm run check:mermaid` build'e bağlı —
+> bozuk bir diyagram derlemeyi kırar; testin gerçekten kırıldığı, eski `+..`
+> sözdizimi geri konularak doğrulandı.
 
 ---
 
