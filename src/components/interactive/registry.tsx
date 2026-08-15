@@ -17,6 +17,7 @@ const DecoratorChain = lazy(() =>
 const InterviewNotes = lazy(() =>
   import('./InterviewNotes').then((mod) => ({ default: mod.InterviewNotes })),
 )
+const Home = lazy(() => import('./Home').then((mod) => ({ default: mod.Home })))
 
 /**
  * Markdown içinden çağrılabilen interaktif bileşenler.
@@ -41,4 +42,5 @@ export const INTERACTIVE: Record<string, ComponentType<InteractiveProps>> = {
   HashMapBuckets,
   DecoratorChain,
   InterviewNotes,
+  Home,
 }

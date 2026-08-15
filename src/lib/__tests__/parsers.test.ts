@@ -240,6 +240,33 @@ describe('koku haritası', () => {
   })
 })
 
+describe('anasayfa özeti', () => {
+  it('her doküman ya okuma yolunda ya araçlarda görünür', async () => {
+    const { stages, extras } = await import('../overview')
+
+    const shown = new Set([
+      ...stages().flatMap((stage) => stage.docs.map((doc) => doc.slug)),
+      ...extras('00-giris').map((doc) => doc.slug),
+    ])
+    const missing = docs
+      .filter((doc) => doc.fileName !== '00-giris')
+      .filter((doc) => !shown.has(doc.slug))
+      .map((doc) => doc.slug)
+
+    expect(missing).toEqual([])
+  })
+
+  it('sayılar içerikten türetilir', async () => {
+    const { stats } = await import('../overview')
+    const summary = stats()
+
+    expect(summary.documents).toBe(docs.length)
+    expect(summary.patterns).toBe(23)
+    expect(summary.diagrams).toBeGreaterThanOrEqual(24)
+    expect(summary.codeBlocks).toBeGreaterThan(300)
+  })
+})
+
 describe('arama', () => {
   it('bölümlere ayırır', () => {
     expect(sections.length).toBeGreaterThan(100)

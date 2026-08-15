@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { docs, extractHeadings, stripManualToc } from './content/docs'
-import { CATEGORY_LABELS } from './config/order'
+import { CATEGORY_LABELS, HOME_FILE } from './config/order'
 import { Markdown, expandComponentMarkers } from './components/Markdown'
 import { Sidebar } from './components/Sidebar'
 import { Toc } from './components/Toc'
@@ -24,7 +24,8 @@ export default function App() {
   const pendingAnchor = useRef<string | null>(null)
   const mainRef = useRef<HTMLElement>(null)
 
-  const fallbackSlug = docs[0]?.slug ?? ''
+  // Açılışta anasayfa; yoksa ilk doküman.
+  const fallbackSlug = docs.find((doc) => doc.fileName === HOME_FILE)?.slug ?? docs[0]?.slug ?? ''
   const requested = params.get('doc') ?? ''
   const doc = docs.find((item) => item.slug === requested) ?? docs.find((item) => item.slug === fallbackSlug)
   const activeSlug = doc?.slug ?? ''

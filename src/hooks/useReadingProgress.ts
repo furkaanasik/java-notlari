@@ -2,6 +2,11 @@ import { useCallback, useEffect, useState, type RefObject } from 'react'
 
 const STORAGE_KEY = 'java-docs:read'
 
+/** Okunmuş dosyaların kümesi — bileşenler de okuyabilsin diye dışa açık. */
+export function readDocs(): Set<string> {
+  return loadRead()
+}
+
 function loadRead(): Set<string> {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)

@@ -1,5 +1,5 @@
 import GithubSlugger from 'github-slugger'
-import { CATEGORY_LABELS, CATEGORY_ORDER, MANUAL_ORDER } from '../config/order'
+import { CATEGORY_LABELS, CATEGORY_ORDER, HOME_FILE, MANUAL_ORDER } from '../config/order'
 
 /**
  * Tüm markdown dosyaları build zamanında gömülür.
@@ -154,6 +154,8 @@ export type DocGroup = { category: string; label: string; docs: Doc[] }
 export function groupedDocs(): DocGroup[] {
   const groups: DocGroup[] = []
   for (const doc of docs) {
+    // Anasayfa menüde kategoriler dışında, en üstte gösterilir.
+    if (doc.fileName === HOME_FILE) continue
     let group = groups.find((g) => g.category === doc.category)
     if (!group) {
       group = {

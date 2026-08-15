@@ -8,6 +8,12 @@
  *    atınca kod değişikliği olmadan menüde çıkar.
  */
 
+/**
+ * Anasayfa: menünün en üstünde, kategorilerin dışında durur ve açılışta
+ * gösterilir. Dosya yoksa uygulama ilk dokümana düşer.
+ */
+export const HOME_FILE = '00-giris'
+
 /** Prefix'siz dosyalar için okuma sırası (dosya adı, uzantısız). */
 export const MANUAL_ORDER: string[] = ['PRINCIPLES', 'TESTING', 'REFACTORING', 'MULAKAT']
 

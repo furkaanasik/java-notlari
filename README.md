@@ -39,6 +39,24 @@ npm run check:render http://localhost:4173/
 
 ---
 
+## Anasayfa
+
+`content/00-giris.md` açılış sayfasıdır: menüde kategorilerin üstünde durur ve
+uygulama onunla açılır. İçindeki `Home` bileşeni seriyi beş aşamalı bir okuma
+yolu olarak gösterir, her aşamanın ilerlemesini çizer ve okunmamış ilk dosyayı
+"kaldığın yer" olarak öne çıkarır.
+
+Sayılar (dosya, pattern, kod bloğu, diyagram, satır) içerikten türetilir; elle
+güncellenen bir yer yoktur. Okuma yoluna girmeyen dosyalar "her an
+başvurulabilir" başlığı altında listelenir — bir test, hiçbir dosyanın
+anasayfada görünmeden kalmadığını doğrular.
+
+Anasayfayı değiştirmek için `src/config/order.ts` içindeki `HOME_FILE`
+sabitini başka bir dosya adına çevirmek yeterli; dosya yoksa uygulama ilk
+dokümanla açılır.
+
+---
+
 ## Yeni dosya eklemek
 
 `content/` altına `.md` dosyasını koy. Hepsi bu — **kod değişikliği gerekmez**.

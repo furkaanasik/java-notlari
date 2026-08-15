@@ -1,4 +1,5 @@
-import { groupedDocs } from '../content/docs'
+import { docs, groupedDocs } from '../content/docs'
+import { HOME_FILE } from '../config/order'
 
 type Props = {
   activeSlug: string
@@ -8,8 +9,29 @@ type Props = {
 }
 
 export function Sidebar({ activeSlug, onSelect, read }: Props) {
+  const home = docs.find((doc) => doc.fileName === HOME_FILE)
+
   return (
     <nav aria-label="Dosyalar" className="py-6 pr-3 pl-5">
+      {home && (
+        <button
+          type="button"
+          onClick={() => onSelect(home.slug)}
+          aria-current={home.slug === activeSlug ? 'page' : undefined}
+          className="mb-6 flex w-full items-center border-l-2 pr-2 pl-3 text-left"
+          style={{
+            height: 'var(--item-h)',
+            fontSize: 'var(--text-small)',
+            borderColor: home.slug === activeSlug ? 'var(--c-accent)' : 'transparent',
+            background: home.slug === activeSlug ? 'var(--c-accent-quiet)' : 'transparent',
+            color: home.slug === activeSlug ? 'var(--c-text-strong)' : 'var(--c-text-muted)',
+            fontWeight: home.slug === activeSlug ? 550 : 400,
+          }}
+        >
+          <span className="truncate">{home.title}</span>
+        </button>
+      )}
+
       {groupedDocs().map((group) => (
         <div key={group.category} className="mb-7">
           <h2
