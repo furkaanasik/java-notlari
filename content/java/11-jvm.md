@@ -1,8 +1,8 @@
 # JVM, Class Loader ve GC
 
 Java dili referans notlarının bir parçası. Seri:
-Temeller → OOP → Strings → Exceptions → Arrays → Collections →
-Streams → JVM → Concurrency → Java 21.
+Temeller → OOP → Strings → Exceptions → Arrays → Generics → Collections →
+Streams → Tarih/Saat → JVM → Concurrency → Java 21.
 
 ## 18. Java Development Environment
 

@@ -175,7 +175,11 @@ describe('içerik yüklemesi', () => {
   it('Java notları sayı ön ekine göre sıralanır', () => {
     const java = docs.filter((doc) => doc.category === 'java').map((doc) => doc.fileName)
     expect(java[0]).toBe('01-temeller')
-    expect(java.at(-1)).toBe('11-java21')
+    expect(java.at(-1)).toBe('13-java21')
+    // Sıra numaraları boşluksuz ve artan olmalı
+    const numbers = java.map((name) => Number(name.slice(0, 2)))
+    expect(numbers).toEqual([...numbers].sort((a, b) => a - b))
+    expect(new Set(numbers).size).toBe(numbers.length)
   })
 
   it('slug ile erişilebilir', () => {

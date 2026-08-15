@@ -1,8 +1,8 @@
 # Java Collections
 
 Java dili referans notlarının bir parçası. Seri:
-Temeller → OOP → Strings → Exceptions → Arrays → Collections →
-Streams → JVM → Concurrency → Java 21.
+Temeller → OOP → Strings → Exceptions → Arrays → Generics → Collections →
+Streams → Tarih/Saat → JVM → Concurrency → Java 21.
 
 ## 16. Java Collections
 
@@ -40,153 +40,19 @@ Map (Collection değil, ayrı hiyerarşi)
 
 ---
 
-### 2. Generics ve Diamond Operatörü
+### 2. Generics
+
+Koleksiyonlar generics'in en yaygın kullanım alanıdır:
 
 ```java
-// Generics olmadan — tip güvenliği yok
-List list = new ArrayList();
-list.add("Hello");
-list.add(123);
-String s = (String) list.get(1); // ClassCastException — runtime'da patlıyor! ❌
-
-// Generics ile — derleme zamanında tip kontrolü
 List<String> strings = new ArrayList<>();
 strings.add("Hello");
-strings.add(123);       // ❌ derleme hatası ✅
-String s2 = strings.get(0); // cast gerekmez ✅
-
-// Diamond operatörü — Java 7+
-List<String> list1 = new ArrayList<String>(); // eski
-List<String> list2 = new ArrayList<>();        // yeni — tip çıkarımı ✅
-
-// Generic metod
-public <T> List<T> listOf(T... items) {
-    return new ArrayList<>(Arrays.asList(items));
-}
-
-// Generic class
-public class Pair<A, B> {
-    private A first;
-    private B second;
-
-    public Pair(A first, B second) {
-        this.first  = first;
-        this.second = second;
-    }
-
-    public A getFirst()  { return first; }
-    public B getSecond() { return second; }
-}
-
-Pair<String, Integer> pair = new Pair<>("Ali", 25);
-System.out.println(pair.getFirst());  // Ali
-System.out.println(pair.getSecond()); // 25
+strings.add(123);           // ❌ derleme hatası — tip güvenliği
+String value = strings.get(0);   // cast gerekmez
 ```
 
-#### Wildcards
-
-Wildcards, generic metodların daha esnek çalışmasını sağlar. Üç türü vardır: unbounded (`?`), upper-bounded (`? extends T`), lower-bounded (`? super T`).
-
-```java
-// --- 1. Unbounded Wildcard: ? ---
-// "Herhangi bir tip" — sadece Object olarak okuyabilirsin
-public void printList(List<?> list) {
-    for (Object o : list) {
-        System.out.println(o);
-    }
-    // list.add("x"); ❌ — ne tip olduğu bilinmiyor, ekleme yasak
-}
-
-printList(List.of(1, 2, 3));       // ✅
-printList(List.of("a", "b", "c")); // ✅
-printList(List.of(1.5, true, "x")); // ✅
-
-// --- 2. Upper-Bounded: ? extends T (Producer) ---
-// "T veya T'nin alt sınıfı" — sadece OKUyabilirsin (Producer)
-public double sumList(List<? extends Number> list) {
-    return list.stream().mapToDouble(Number::doubleValue).sum();
-}
-
-sumList(List.of(1, 2, 3));       // ✅ Integer extends Number
-sumList(List.of(1.5, 2.5));      // ✅ Double extends Number
-// sumList(List.of("a", "b"));   // ❌ String, Number'ı extend etmez
-
-// Neden ekleme yasak?
-List<? extends Number> nums = new ArrayList<Integer>();
-// nums.add(1);      // ❌ — belki bu bir List<Double>, Integer eklenemez
-// nums.add(1.5);    // ❌ — belki bu bir List<Integer>, Double eklenemez
-Number n = nums.get(0); // ✅ — her halükarda Number'dır
-
-// --- 3. Lower-Bounded: ? super T (Consumer) ---
-// "T veya T'nin üst sınıfı" — sadece YAZabilirsin (Consumer)
-public void addNumbers(List<? super Integer> list) {
-    list.add(1);   // ✅
-    list.add(2);   // ✅
-    // Integer okuyamazsın, Object olarak okursun
-    Object o = list.get(0); // ✅ ama Integer garantisi yok
-}
-
-List<Number>  numbers  = new ArrayList<>();
-List<Object>  objects  = new ArrayList<>();
-List<Integer> integers = new ArrayList<>();
-
-addNumbers(numbers);  // ✅ Number, Integer'ın üst sınıfı
-addNumbers(objects);  // ✅ Object, Integer'ın üst sınıfı
-addNumbers(integers); // ✅ Integer, Integer'ın kendisi
-```
-
-**PECS Prensibi — Producer Extends, Consumer Super**
-
-```java
-// Bir kaynaktan (producer) okuyorsan → extends
-// Bir hedefe (consumer) yazıyorsan   → super
-
-// Örnek: kopyalama metodu
-public static <T> void copy(
-    List<? extends T> src,  // kaynak — okuma (producer → extends)
-    List<? super T>   dst   // hedef  — yazma  (consumer → super)
-) {
-    for (T item : src) {
-        dst.add(item);
-    }
-}
-
-List<Integer> ints    = List.of(1, 2, 3);
-List<Number>  numbers = new ArrayList<>();
-copy(ints, numbers); // ✅ — Integer extends Number, Number super Integer
-
-// Mülakat sorusu: neden List<Number> ≠ List<Integer>?
-List<Number> numList = new ArrayList<Integer>(); // ❌ derleme hatası!
-// Çünkü:
-// numList.add(3.14); // Double da Number — bu geçerli olurdu
-// ama içinde Integer bekleniyor — tip güvensiz!
-
-// Doğru yol:
-List<? extends Number> numList2 = new ArrayList<Integer>(); // ✅
-```
-
-**Wildcard Özet Tablosu:**
-
-| Syntax | Anlamı | Okuma | Yazma | Kullanım |
-|---|---|---|---|---|
-| `<?>` | Herhangi bir tip | `Object` olarak ✅ | ❌ | Sadece print/iterate |
-| `<? extends T>` | T veya alt sınıfı | `T` olarak ✅ | ❌ | Kaynak (producer) |
-| `<? super T>` | T veya üst sınıfı | `Object` olarak ⚠️ | `T` olarak ✅ | Hedef (consumer) |
-
-#### Type Erasure
-
-```java
-List<String>  strings  = new ArrayList<>();
-List<Integer> integers = new ArrayList<>();
-
-// Runtime'da ikisi de aynı!
-System.out.println(strings.getClass() == integers.getClass()); // true
-
-if (strings instanceof List<String>) { } // ❌ derleme hatası
-if (strings instanceof List<?>)      { } // ✅
-```
-
----
+Generic sınıf/metot yazmak, `? extends` ile `? super` arasındaki seçim (PECS)
+ve tip silmenin sonuçları ayrı bir bölümde: **07-generics.md**.
 
 ### 3. ArrayList
 

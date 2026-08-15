@@ -1,25 +1,25 @@
 # OOP — Temel Kavramlar
 
 Java dili referans notlarının bir parçası. Seri:
-Temeller → OOP → Strings → Exceptions → Arrays → Collections →
-Streams → JVM → Concurrency → Java 21.
-
-## İçindekiler
-
-- [8. OOP — Faz 1: Temel Kavramlar](#8-oop--faz-1-temel-kavramlar)
-- [9. OOP — Faz 1: NotebookLM Detaylı Notlar (Örneklerle)](#9-oop--faz-1-notebooklm-detaylı-notlar-örneklerle)
+Temeller → OOP → Strings → Exceptions → Arrays → Generics → Collections →
+Streams → Tarih/Saat → JVM → Concurrency → Java 21.
 
 ---
 
-## 8. OOP — Faz 1: Temel Kavramlar
+Nesne Yönelimli Programlama'nın temel fikri: gerçek dünyadaki varlıkları
+**sınıf (class)** olarak modelleyip, bu sınıflardan **nesne (object)** üretmek.
+Sınıf şablondur; nesne o şablondan üretilen somut varlıktır.
 
-Nesne Yönelimli Programlama (OOP), Java'nın kalbinde yatar. Temel fikir şudur: gerçek dünyadaki varlıkları kod içinde **sınıf (class)** olarak modelleyip, bu sınıflardan **nesne (object)** yaratarak çalışmak. Bir sınıf şablondur; nesne ise o şablondan üretilen somut varlıktır.
+**Constructor** nesne yaratılırken çalışır ve başlangıç değerlerini kurar.
+**Access modifier**'lar neyin dışarıdan görüneceğini belirler; kapsüllemenin
+temelidir. `this` mevcut nesneyi, `super` üst sınıfı işaret eder. `static` üyenin
+sınıfa ait olduğunu (nesneye değil), `final` ise değişmezliği belirtir.
 
-**Constructor**, nesne yaratılırken çalışır ve başlangıç değerlerini ayarlar. **Access modifier**'lar, hangi alanların ve metodların dışarıdan erişilebilir olduğunu belirler; encapsulation'ın temelidir. `this` mevcut nesneyi, `super` ise parent sınıfı işaret eder. `static` bir üyenin sınıfa ait olduğunu (nesneye değil), `final` ise değişmezliği belirtir.
+---
 
-### Classes & Objects
+## 1. Sınıflar ve Nesneler
 
-Class bir **şablon**, object o şablondan üretilen **somut varlık**:
+Sınıf bir **şablon**, nesne o şablondan üretilen "yaşayan" varlıktır:
 
 ```java
 public class Car {
@@ -39,300 +39,11 @@ public class Car {
         System.out.println(brand + " stopped.");
     }
 }
-
-Car bmw = new Car();
-bmw.brand = "BMW";
-bmw.year = 2020;
-bmw.start(); // BMW started.
 ```
 
-**Referans kopyası tuzağı:**
+Aynı şablondan farklı durumda nesneler üretilir:
 
 ```java
-Car car1 = new Car();
-Car car2 = car1; // aynı nesneyi gösteriyorlar!
-
-car2.brand = "Mercedes";
-System.out.println(car1.brand); // Mercedes ← car1 de değişti!
-```
-
----
-
-### Constructors
-
-Object yaratılırken çalışan özel metod. Return type'ı yoktur, class adıyla aynıdır.
-
-```java
-public class Car {
-    String brand;
-    int year;
-
-    // Default constructor
-    public Car() {
-        this.brand = "Unknown";
-        this.year = 0;
-    }
-
-    // Parametreli constructor
-    public Car(String brand, int year) {
-        this.brand = brand;
-        this.year = year;
-    }
-
-    // Constructor chaining
-    public Car(String brand) {
-        this(brand, 2024); // parametreli constructor'ı çağırır
-    }
-}
-
-Car c1 = new Car();              // Unknown, 0
-Car c2 = new Car("BMW", 2020);   // BMW, 2020
-Car c3 = new Car("Toyota");      // Toyota, 2024
-```
-
-**Önemli:** Eğer sen parametreli constructor yazarsan Java artık default constructor'ı otomatik üretmez:
-
-```java
-public class Car {
-    String brand;
-
-    public Car(String brand) {
-        this.brand = brand;
-    }
-}
-
-Car c = new Car();        // ❌ derleme hatası!
-Car c = new Car("BMW");   // ✅
-```
-
----
-
-### Access Modifiers
-
-```java
-public class BankAccount {
-    public String ownerName;      // herkes erişebilir
-    protected double balance;     // aynı paket + alt sınıflar
-    double interestRate;          // aynı paket (package-private)
-    private String password;      // sadece bu sınıf
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        if (password.length() >= 8) {
-            this.password = password;
-        }
-    }
-}
-```
-
-| Modifier | Aynı Sınıf | Aynı Paket | Alt Sınıf | Her Yer |
-|---|---|---|---|---|
-| `public` | ✅ | ✅ | ✅ | ✅ |
-| `protected` | ✅ | ✅ | ✅ | ❌ |
-| default | ✅ | ✅ | ❌ | ❌ |
-| `private` | ✅ | ❌ | ❌ | ❌ |
-
-**Neden her şey private olmalı?**
-
-```java
-// Kötü ❌
-public class BankAccount {
-    public double balance;
-}
-account.balance = -1000; // negatif bakiye!
-
-// İyi ✅
-public class BankAccount {
-    private double balance;
-
-    public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-        }
-    }
-}
-```
-
----
-
-### `this` Keyword
-
-```java
-public class Car {
-    String brand;
-    int year;
-
-    public Car(String brand, int year) {
-        this.brand = brand; // field ile parametre adı çakışıyor, this şart
-        this.year = year;
-    }
-
-    // Method chaining için this döndürme
-    public Car setBrand(String brand) {
-        this.brand = brand;
-        return this;
-    }
-
-    public Car setYear(int year) {
-        this.year = year;
-        return this;
-    }
-}
-
-// Method chaining
-Car car = new Car("", 0)
-    .setBrand("BMW")
-    .setYear(2020);
-```
-
----
-
-### `super` Keyword
-
-```java
-public class Vehicle {
-    String brand;
-    int year;
-
-    public Vehicle(String brand, int year) {
-        this.brand = brand;
-        this.year = year;
-    }
-
-    void describe() {
-        System.out.println(brand + " - " + year);
-    }
-}
-
-public class Car extends Vehicle {
-    int doorCount;
-
-    public Car(String brand, int year, int doorCount) {
-        super(brand, year); // parent constructor — ilk satırda olmalı!
-        this.doorCount = doorCount;
-    }
-
-    @Override
-    void describe() {
-        super.describe();  // parent metodunu çağır
-        System.out.println("Doors: " + doorCount);
-    }
-}
-
-Car car = new Car("BMW", 2020, 4);
-car.describe();
-// BMW - 2020
-// Doors: 4
-```
-
-**super() her zaman constructor'ın ilk satırında olmalı:**
-
-```java
-public Car(String brand, int year, int doorCount) {
-    this.doorCount = doorCount;
-    super(brand, year); // ❌ derleme hatası!
-}
-```
-
----
-
-### `static` Keyword
-
-```java
-public class Counter {
-    private static int count = 0; // tüm nesneler paylaşır
-    private int id;
-
-    public Counter() {
-        count++;
-        this.id = count;
-    }
-
-    public static int getCount() { // nesne gerekmez, class üzerinden çağrılır
-        return count;
-    }
-}
-
-Counter c1 = new Counter();
-Counter c2 = new Counter();
-System.out.println(Counter.getCount()); // 2
-```
-
-**Static method'da `this` kullanılamaz:**
-
-```java
-public static void show() {
-    System.out.println(this.brand); // ❌ static context'te nesne yok
-}
-```
-
----
-
-### `final` Keyword
-
-```java
-// 1. final variable — bir kez atanır
-final int MAX_SPEED = 200;
-MAX_SPEED = 250; // ❌ derleme hatası
-
-// 2. final field — referans değiştirilemez, içerik değişebilir!
-final List<String> brands = new ArrayList<>();
-brands.add("BMW");          // ✅ içerik değişti
-brands = new ArrayList<>(); // ❌ referans değiştirilemez
-
-// 3. final method — override edilemez
-public class Vehicle {
-    public final void startEngine() {
-        System.out.println("Engine started");
-    }
-}
-public class Car extends Vehicle {
-    @Override
-    public void startEngine() { } // ❌ derleme hatası!
-}
-
-// 4. final class — extend edilemez (örn. Java'nın String class'ı)
-public final class MyClass { }
-public class Child extends MyClass { } // ❌ derleme hatası!
-```
-
-**Constant tanımı — static final:**
-
-```java
-public class MathConstants {
-    public static final double PI = 3.14159;
-    public static final int MAX_RETRY = 3;
-}
-
-double area = MathConstants.PI * radius * radius;
-```
-
----
-
-## 9. OOP — Faz 1: NotebookLM Detaylı Notlar (Örneklerle)
-
-### 1. Java Sınıfları ve Nesneleri
-
-Sınıf bir **şablon (blueprint)**, nesne o şablondan üretilen "yaşayan" varlık:
-
-```java
-public class Car {
-    // Fields (state)
-    String brand;
-    int year;
-    boolean isRunning;
-
-    // Methods (behavior)
-    void start() {
-        isRunning = true;
-        System.out.println(brand + " started.");
-    }
-}
-
-// Aynı şablondan farklı durumda iki nesne
 Car bmw    = new Car();
 bmw.brand  = "BMW";
 bmw.year   = 2020;
@@ -345,21 +56,23 @@ bmw.start();    // BMW started.
 toyota.start(); // Toyota started.
 ```
 
-**Referans tuzağı — instantiation dikkat noktası:**
+### Referans kopyası tuzağı
 
 ```java
 Car car1 = new Car();
-Car car2 = car1; // yeni nesne değil! aynı nesneye iki referans
+Car car2 = car1; // yeni nesne DEĞİL — aynı nesneye ikinci referans
 
 car2.brand = "Mercedes";
 System.out.println(car1.brand); // Mercedes ← car1 de değişti!
-
-// Gerçekten kopyalamak istiyorsan copy constructor kullan
 ```
+
+Gerçekten kopya istiyorsan copy constructor kullan (aşağıda).
 
 ---
 
-### 2. Constructors
+## 2. Constructors
+
+Nesne yaratılırken çalışan özel metot. Dönüş tipi yoktur, adı sınıf adıyla aynıdır.
 
 ```java
 public class User {
@@ -372,7 +85,7 @@ public class User {
         // name = null, age = 0 (default değerler)
     }
 
-    // 2. Parametreli — encapsulation için başlangıç değeri enjekte et
+    // 2. Parametreli — başlangıç değerini dışarıdan al
     public User(String name, int age, String email) {
         this.name  = name;
         this.age   = age;
@@ -388,17 +101,17 @@ public class User {
 
     // 4. Constructor chaining — this() ile diğer constructor'ı çağır
     public User(String name) {
-        this(name, 0, "unknown@mail.com"); // this() her zaman İLK satırda olmalı!
+        this(name, 0, "unknown@mail.com"); // this() her zaman İLK satırda olmalı
     }
 }
 
 User u1 = new User();                          // parametresiz
 User u2 = new User("Ali", 25, "ali@mail.com"); // parametreli
 User u3 = new User(u2);                        // copy
-User u4 = new User("Veli");                    // chaining — age=0, email=unknown
+User u4 = new User("Veli");                    // chaining — age=0
 ```
 
-**Kritik — parametreli constructor yazınca default kaybolur:**
+### Kritik: parametreli constructor yazınca default kaybolur
 
 ```java
 public class Car {
@@ -415,7 +128,7 @@ Car c2 = new Car("BMW");   // ✅
 
 ---
 
-### 3. Access Modifiers
+## 3. Access Modifiers
 
 ```java
 package com.myapp.bank;
@@ -445,7 +158,10 @@ public class BankAccount {
 | default | ✅ | ✅ | ❌ | ❌ |
 | `private` | ✅ | ❌ | ❌ | ❌ |
 
-**protected — farklı paketteki alt sınıf erişebilir, başka sınıf erişemez:**
+### `protected`'ın ince noktası
+
+Farklı paketteki **alt sınıf** erişebilir; aynı paketteki başka bir sınıf
+erişemez:
 
 ```java
 package com.myapp.vehicle;
@@ -470,73 +186,57 @@ public class Garage {
 }
 ```
 
----
-
-### 4. Keywords
-
-#### A. `static`
+### Neden her şey private olmalı?
 
 ```java
-public class Counter {
-    private static int totalCount = 0; // bellekte tek kopya, tüm nesneler paylaşır
-    private int id;
-
-    public Counter() {
-        totalCount++;
-        this.id = totalCount;
-    }
-
-    public static int getTotalCount() {
-        return totalCount;
-        // return this.id; // ❌ static içinde instance değişkeni kullanılamaz
-    }
+// Kötü ❌
+public class BankAccount {
+    public double balance;
 }
+account.balance = -1000; // negatif bakiye — hiçbir kural engellemedi
 
-Counter c1 = new Counter(); // id=1, total=1
-Counter c2 = new Counter(); // id=2, total=2
-System.out.println(Counter.getTotalCount()); // 2
-```
+// İyi ✅
+public class BankAccount {
+    private double balance;
 
-**Static blok — karmaşık başlatma için:**
-
-```java
-public class Config {
-    static final Map<String, String> settings;
-
-    static {
-        settings = new HashMap<>();
-        settings.put("env", "production");
-        settings.put("timeout", "30");
-        System.out.println("Config loaded.");
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
     }
 }
 ```
 
+Alanı `private` yapıp her alan için getter/setter yazmak kapsülleme değildir;
+kuralı **tek giriş noktasında** uygulamak kapsüllemedir.
+(Bkz. PRINCIPLES.md — Encapsulation & Information Hiding)
+
 ---
 
-#### B. `this`
+## 4. `this`
 
 ```java
 public class Car {
     String brand;
     int year;
 
-    // 1. Shadowing çözümü
+    // 1. Shadowing çözümü — alan ile parametre aynı adda
     public Car(String brand, int year) {
-        this.brand = brand; // this.brand = field, brand = parametre
+        this.brand = brand; // this.brand = alan, brand = parametre
         this.year  = year;
     }
 
-    // 2. Nesneyi parametre olarak geç
+    // 2. Nesnenin kendisini parametre olarak geçirme
     void register(CarRegistry registry) {
         registry.add(this);
     }
 
-    // 3. Method chaining
+    // 3. Method chaining için this döndürme
     public Car setBrand(String brand) {
         this.brand = brand;
         return this;
     }
+
     public Car setYear(int year) {
         this.year = year;
         return this;
@@ -546,8 +246,11 @@ public class Car {
 Car car = new Car("", 0)
     .setBrand("BMW")
     .setYear(2020);
+```
 
-// 4. İç sınıftan dış sınıfa erişim
+### İç sınıftan dış sınıfa erişim
+
+```java
 public class Outer {
     String name = "Outer";
 
@@ -556,6 +259,7 @@ public class Outer {
 
         void printNames() {
             System.out.println(name);            // Inner
+            System.out.println(this.name);       // Inner
             System.out.println(Outer.this.name); // Outer
         }
     }
@@ -564,7 +268,7 @@ public class Outer {
 
 ---
 
-#### C. `super`
+## 5. `super`
 
 ```java
 public class Vehicle {
@@ -591,7 +295,7 @@ public class Car extends Vehicle {
 
     @Override
     void describe() {
-        super.describe();
+        super.describe();  // üst sınıfın metodunu çağır
         System.out.println("Doors: " + doorCount);
     }
 }
@@ -602,21 +306,80 @@ car.describe();
 // Doors: 4
 ```
 
----
-
-#### D. `final`
+`super()` her zaman constructor'ın ilk satırında olmalıdır:
 
 ```java
-// 1. final variable
+public Car(String brand, int year, int doorCount) {
+    this.doorCount = doorCount;
+    super(brand, year); // ❌ derleme hatası!
+}
+```
+
+---
+
+## 6. `static`
+
+```java
+public class Counter {
+    private static int totalCount = 0; // bellekte tek kopya, tüm nesneler paylaşır
+    private int id;
+
+    public Counter() {
+        totalCount++;
+        this.id = totalCount;
+    }
+
+    public static int getTotalCount() {
+        return totalCount;
+        // return this.id; // ❌ static içinde instance üyesi kullanılamaz
+    }
+}
+
+Counter c1 = new Counter(); // id=1, total=1
+Counter c2 = new Counter(); // id=2, total=2
+System.out.println(Counter.getTotalCount()); // 2
+```
+
+Static metotta `this` yoktur — ortada nesne yoktur:
+
+```java
+public static void show() {
+    System.out.println(this.brand); // ❌ static context'te nesne yok
+}
+```
+
+### Static blok — karmaşık başlatma
+
+```java
+public class Config {
+    static final Map<String, String> settings;
+
+    static {
+        settings = new HashMap<>();
+        settings.put("env", "production");
+        settings.put("timeout", "30");
+        System.out.println("Config loaded.");
+    }
+}
+```
+
+Static blok, sınıf ilk kez yüklendiğinde bir kez çalışır.
+
+---
+
+## 7. `final`
+
+```java
+// 1. final değişken — bir kez atanır
 final int MAX_SPEED = 200;
-MAX_SPEED = 250; // ❌
+MAX_SPEED = 250; // ❌ derleme hatası
 
-// 2. final field — referans değişmez, içerik değişebilir
+// 2. final alan — referans değişmez, İÇERİK değişebilir!
 final List<String> brands = new ArrayList<>();
-brands.add("BMW");          // ✅
-brands = new ArrayList<>(); // ❌
+brands.add("BMW");          // ✅ içerik değişti
+brands = new ArrayList<>(); // ❌ referans değiştirilemez
 
-// 3. final method — override edilemez
+// 3. final metot — override edilemez
 public class Vehicle {
     public final void startEngine() {
         System.out.println("Engine started");
@@ -627,11 +390,11 @@ public class Car extends Vehicle {
     public void startEngine() { } // ❌ derleme hatası!
 }
 
-// 4. final class — extend edilemez
+// 4. final sınıf — extend edilemez (örn. java.lang.String)
 public final class SSLConfig { }
 public class MySSL extends SSLConfig { } // ❌
 
-// 5. final field constructor içinde atanmalı
+// 5. final alan constructor'da atanmalı
 public class Circle {
     final double radius;
 
@@ -643,7 +406,11 @@ Circle c = new Circle(5.0);
 c.radius = 10.0; // ❌
 ```
 
-**Constant tanımı:**
+İkinci madde en sık karıştırılanıdır: `final` **referansı** dondurur, nesnenin
+içeriğini değil. Gerçek değişmezlik için içeriğin de korunması gerekir
+(Bkz. PRINCIPLES.md — Immutability).
+
+### Sabit tanımı — `static final`
 
 ```java
 public class AppConstants {
@@ -651,27 +418,29 @@ public class AppConstants {
     public static final int    MAX_RETRY = 3;
     public static final String APP_NAME  = "MyApp";
 }
+
+double area = AppConstants.PI * radius * radius;
 ```
 
 ---
 
-### 5. Kanonik Sıralama (JLS)
+## 8. Değiştirici sırası (JLS kanonik sırası)
+
+Java tanımlayıcıların sırasını zorunlu kılmaz ama dilin belirttiği bir
+konvansiyon vardır: **anotasyon → erişim → static → final → diğerleri**.
 
 ```java
-// Önerilen sıra: 1. Anotasyon  2. Erişim belirleyici  3. static  4. final  5. Diğerleri
-
-// Alan
+// Önerilen
 private static final int MAX = 100;
 
-// Metod
 @Override
 public void describe() { }
 
-// Aşağıdaki de DERLENİR — sadece konvansiyona aykırıdır, hata değildir:
+// Derlenir ama konvansiyona aykırı
 static private final int MAX2 = 100;
 ```
 
-> İki tuzak: `@Override` sadece metoda konulabilir (alanda derleme hatası),
-> ve `static` metod override edilemez — `@Override public static` diye bir şey yoktur.
+İki tuzak:
 
----
+- `@Override` yalnızca **metoda** konulabilir; alana konulursa derleme hatasıdır
+- `static` metot override edilemez — `@Override public static` diye bir şey yoktur

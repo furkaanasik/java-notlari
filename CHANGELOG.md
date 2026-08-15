@@ -176,3 +176,34 @@ içeriğiyle birlikte `01-temeller.md`'ye taşındı.
 
 **Menü:** `src/config/order.ts` içine `java` kategorisi eklendi ve seri sırası
 korunacak şekilde en üste alındı; dosyalar sayı ön ekiyle otomatik sıralanıyor.
+
+
+---
+
+## İçerik tamamlama
+
+**Behavioral pattern'ler (13-23)** yazıldı; katalog 23/23 oldu. Pattern grafiği
+kendiliğinden doldu: 11 boş düğüm kalmadı, ilişki sayısı 34'ten 61'e çıktı.
+Diğer dosyalardan Strategy, Observer, State, Iterator ve Visitor'a yapılan
+atıflar artık hedefine gidiyor.
+
+**OOP tekrarı temizlendi.** `02-oop-temel.md` içindeki 8. ve 9. bölümler aynı
+yedi konuyu (sınıf, constructor, erişim belirleyici, `this`, `super`, `static`,
+`final`) iki kez anlatıyordu. Tek anlatımda birleştirildi; ikinci bölümdeki
+özgün parçalar korundu: copy constructor, static blok, `Outer.this`,
+`protected`'ın paketler arası davranışı, `final` alanın constructor'da atanması
+ve JLS değiştirici sırası. 677 → 446 satır.
+
+**İki yeni bölüm.**
+
+- `07-generics.md` — generic sınıf/metot yazma, sınırlı tipler, wildcard'lar ve
+  PECS, tip silme ve sonuçları, generics ile dizilerin neden karışmadığı,
+  `@SafeVarargs`. Koleksiyonlar dosyasındaki generics anlatımı buraya devredildi
+  ve orada kısa bir yönlendirme bırakıldı (148 satır → 14 satır).
+- `10-datetime.md` — `java.time`: doğru tipi seçmek (`Instant` ile
+  `LocalDateTime` ayrımı), `Period` ile `Duration` farkı, zaman dilimleri ve
+  saklama kuralı, biçimlendirme, `Clock` ile test edilebilirlik, eski API köprüsü.
+
+**Yeniden numaralandırma.** Yeni bölümler seri sırasına oturması için Java
+dosyaları 01-13 olarak yeniden numaralandı (`git mv` ile). Dosya adına yapılan
+dış atıf yalnızca `01-temeller.md` idi ve etkilenmedi.

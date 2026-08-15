@@ -1,8 +1,8 @@
 # Java Exceptions
 
 Java dili referans notlarının bir parçası. Seri:
-Temeller → OOP → Strings → Exceptions → Arrays → Collections →
-Streams → JVM → Concurrency → Java 21.
+Temeller → OOP → Strings → Exceptions → Arrays → Generics → Collections →
+Streams → Tarih/Saat → JVM → Concurrency → Java 21.
 
 ## 14. Java Exceptions
 

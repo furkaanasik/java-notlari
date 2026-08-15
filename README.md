@@ -126,7 +126,7 @@ Aksi hâlde blok normal gösterilir.
 
 ```
 content/              Markdown kaynak (tek doğruluk kaynağı)
-  java/               Java dili notları (11 dosya)
+  java/               Java dili notları (13 dosya)
   patterns/           Design pattern dosyaları
 scripts/
   check-mermaid.mjs   Diyagram sözdizimi (build'e bağlı)
@@ -339,6 +339,6 @@ dahil **0 ihlal**. Denetim şunları yakaladı ve düzeltildi:
 
 ## Henüz yapılmadı
 
-- Java notlarında OOP bölümündeki tekrar (Faz 1 ve NotebookLM notları büyük
-  ölçüde aynı içeriği iki kez anlatıyor)
-- Eksik konular: `java.time`, bağımsız bir Generics bölümü
+Bilinen bir eksik yok. Yeni bir konu eklemek için `content/` altına dosya
+koymak yeterli — menü, arama, çapraz atıflar ve pattern grafiği kendiliğinden
+günceller.
