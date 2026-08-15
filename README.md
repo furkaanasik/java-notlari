@@ -104,6 +104,12 @@ Dokümanlara özel bir işaretleme eklemeden çalışan şeyler:
 | Satır yorumunda `❌` / `✅` | Satır kırmızı / yeşil işaretlenir |
 | İlk `## İçindekiler` bloğu | Gövdede gizlenir (sağ panel zaten üretiyor); dosyada kalır |
 | ` ```java `, `json`, `sql`, `bash`, `xml`, `yaml`, `properties`, `diff` | Sözdizimi vurgulaması |
+| `TESTING.md` gibi dosya adları | Bağlantıya dönüşür |
+| `Bkz. TESTING.md — Mock ne zaman tasarım kokusudur` | Doğrudan o başlığa gider |
+
+Atıflar yalnızca **var olan** dosyalara bağlanır; olmayan bir dosya adı düz metin
+kalır, kırık bağlantı üretilmez. Başlık kısmı ancak hedefte eşleşen bir başlık
+varsa bağlantıya dahil edilir, yoksa yalnızca dosya adı bağlanır.
 
 Karşılaştırma tespiti temkinlidir: her türden tam bir başlık olmalı, "önce"
 "sonra"dan önce gelmeli ve iki taraf da en az iki gerçek satır içermelidir.
@@ -157,7 +163,6 @@ src/
 
 ## Henüz yapılmadı
 
-- Çapraz atıf bağlantıları (metindeki `PRINCIPLES.md` gibi adların linke dönmesi)
 - Okuma ilerlemesi ve okundu işaretleri
 - Klavye navigasyonu (`j/k`, `n/p`)
 - Yazdırma / PDF için baskı stilleri

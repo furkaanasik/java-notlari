@@ -13,6 +13,9 @@ export default function App() {
   const { theme, toggle } = useTheme()
   const [params, setParams] = useSearchParams()
   const [paletteOpen, setPaletteOpen] = useState(false)
+  // Bekleyen çapa state DEĞİL ref: state olsaydı temizlenmesi yeni bir render
+  // tetikleyip effect'i ikinci kez çalıştırır ve sayfayı hemen başa döndürürdü.
+  const pendingAnchor = useRef<string | null>(null)
   const mainRef = useRef<HTMLElement>(null)
 
   const fallbackSlug = docs[0]?.slug ?? ''
@@ -21,10 +24,20 @@ export default function App() {
   const activeSlug = doc?.slug ?? ''
 
   const openDoc = useCallback(
-    (slug: string) => {
+    (slug: string, anchor?: string) => {
+      // Aynı doküman içindeki çapa: DOM zaten hazır, doğrudan kaydır.
+      if (slug === activeSlug) {
+        const target = anchor ? document.getElementById(anchor) : null
+        if (target) target.scrollIntoView({ block: 'start' })
+        return
+      }
+
+      // Farklı doküman: hedef başlık henüz DOM'da yok. İstek kaydedilir,
+      // aşağıdaki effect render sonrası uygular.
+      pendingAnchor.current = anchor ?? null
       setParams(slug === fallbackSlug ? {} : { doc: slug })
     },
-    [setParams, fallbackSlug],
+    [setParams, fallbackSlug, activeSlug],
   )
 
   // Elle yazılmış "## İçindekiler" gövdeden çıkarılır; sağ panel onun yerini alır.
@@ -34,10 +47,18 @@ export default function App() {
   )
   const headings = useMemo(() => extractHeadings(body), [body])
 
-  // Dosya değişince içerik en üste dönsün.
+  /**
+   * Doküman render edildikten sonra: bekleyen bir çapa varsa oraya, yoksa
+   * en üste kaydır. Böylece çapraz atıf ve arama sonucu doğru başlıkta açılır.
+   */
   useEffect(() => {
-    mainRef.current?.scrollTo({ top: 0, behavior: 'auto' })
-  }, [activeSlug])
+    const anchor = pendingAnchor.current
+    pendingAnchor.current = null
+
+    const target = anchor ? document.getElementById(anchor) : null
+    if (target) target.scrollIntoView({ block: 'start' })
+    else mainRef.current?.scrollTo({ top: 0, behavior: 'auto' })
+  }, [activeSlug, body])
 
   // Cmd/Ctrl+K ile arama paleti.
   useEffect(() => {
@@ -53,17 +74,9 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  /** Aramadan gelen seçim: önce dosyayı aç, sonra ilgili başlığa kaydır. */
+  /** Aramadan gelen seçim: dosyayı aç ve ilgili başlığa kaydır. */
   const goToResult = useCallback(
-    (slug: string, headingId: string) => {
-      openDoc(slug)
-      // Yeni doküman render edildikten sonra hedefe git.
-      window.setTimeout(() => {
-        const target = headingId ? document.getElementById(headingId) : null
-        if (target) target.scrollIntoView({ block: 'start' })
-        else mainRef.current?.scrollTo({ top: 0 })
-      }, 60)
-    },
+    (slug: string, headingId: string) => openDoc(slug, headingId),
     [openDoc],
   )
 

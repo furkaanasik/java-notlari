@@ -2,6 +2,7 @@ import { isValidElement, type ComponentPropsWithoutRef, type ReactNode } from 'r
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
+import { rehypeCrossRefs } from '../lib/cross-refs'
 import { CodeBlock } from './CodeBlock'
 import { MermaidDiagram } from './MermaidDiagram'
 import { INTERACTIVE } from './interactive/registry'
@@ -50,14 +51,15 @@ export function expandComponentMarkers(source: string): string {
 type Props = {
   source: string
   theme: Theme
-  onNavigate?: (slug: string) => void
+  /** İkinci argüman: gidilecek başlık kimliği (boş olabilir). */
+  onNavigate?: (slug: string, anchor?: string) => void
 }
 
 export function Markdown({ source, theme, onNavigate }: Props) {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeSlug]}
+      rehypePlugins={[rehypeSlug, rehypeCrossRefs]}
       components={{
         pre({ children }: ComponentPropsWithoutRef<'pre'>) {
           const { language, code } = readCodeChild(children)
@@ -76,6 +78,32 @@ export function Markdown({ source, theme, onNavigate }: Props) {
           }
 
           return <CodeBlock language={language} code={code} />
+        },
+
+        // Çapraz atıf bağlantıları uygulama içinde gezinsin, sayfa yenilenmesin.
+        a({ children, ...raw }: ComponentPropsWithoutRef<'a'>) {
+          // react-markdown `node` prop'unu da geçiriyor; DOM'a sızmasın.
+          const { node: _node, ...rest } = raw as Record<string, unknown>
+          const targetDoc = rest['data-doc']
+          const anchor = rest['data-anchor']
+
+          if (typeof targetDoc === 'string' && onNavigate) {
+            return (
+              <a
+                {...(rest as ComponentPropsWithoutRef<'a'>)}
+                onClick={(event) => {
+                  // Yeni sekmede açma isteğini bozma.
+                  if (event.metaKey || event.ctrlKey || event.shiftKey) return
+                  event.preventDefault()
+                  onNavigate(targetDoc, typeof anchor === 'string' ? anchor : '')
+                }}
+              >
+                {children}
+              </a>
+            )
+          }
+
+          return <a {...(rest as ComponentPropsWithoutRef<'a'>)}>{children}</a>
         },
 
         table({ children, ...rest }: ComponentPropsWithoutRef<'table'>) {

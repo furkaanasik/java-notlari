@@ -552,3 +552,15 @@
   max-width: 100%;
   height: auto;
 }
+
+/* Çapraz atıf bağlantısı — normal linkten ayırt edilsin */
+.markdown a.xref {
+  text-decoration: none;
+  border-bottom: 1px dashed color-mix(in oklch, var(--c-accent) 55%, transparent);
+  padding-bottom: 1px;
+}
+
+.markdown a.xref:hover {
+  border-bottom-style: solid;
+  background: var(--c-accent-quiet);
+}
