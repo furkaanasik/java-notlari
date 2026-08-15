@@ -40,6 +40,9 @@ async function waitForServer(url, timeoutMs = 60_000) {
 let preview
 
 try {
+  console.log('\n▸ Testler\n')
+  await run('npx', ['vitest', 'run'])
+
   console.log('\n▸ Derleme\n')
   await run('npm', ['run', 'build'])
 

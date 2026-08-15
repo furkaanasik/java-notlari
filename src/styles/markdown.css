@@ -587,3 +587,34 @@
     transition: none;
   }
 }
+
+/* ---------- Beklenen çıktı paneli ---------- */
+
+.markdown .code-output {
+  border-top: 1px solid oklch(1 0 0 / 0.08);
+  background: oklch(0 0 0 / 0.25);
+}
+
+.markdown .code-output__label {
+  margin: 0;
+  padding: 0.4rem 0.85rem 0;
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: oklch(0.62 0.005 286);
+}
+
+.markdown .code-output pre {
+  margin: 0;
+  padding: 0.5rem 0.85rem 0.85rem;
+  overflow-x: auto;
+  background: transparent;
+}
+
+.markdown .code-output code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: oklch(0.82 0.09 150);
+  background: none;
+  white-space: pre;
+}

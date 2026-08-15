@@ -9,7 +9,7 @@
  */
 
 /** Prefix'siz dosyalar için okuma sırası (dosya adı, uzantısız). */
-export const MANUAL_ORDER: string[] = ['PRINCIPLES', 'TESTING', 'REFACTORING']
+export const MANUAL_ORDER: string[] = ['PRINCIPLES', 'TESTING', 'REFACTORING', 'MULAKAT']
 
 /** Klasör adı → menüde görünecek kategori başlığı. */
 export const CATEGORY_LABELS: Record<string, string> = {

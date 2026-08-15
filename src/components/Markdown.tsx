@@ -99,7 +99,7 @@ function MarkdownView({ source, theme, onNavigate }: Props) {
             if (Component) {
               return (
                 <Suspense fallback={<p className="interactive-loading">Bileşen yükleniyor…</p>}>
-                  <Component onNavigate={(slug: string) => navigateRef.current?.(slug)} />
+                  <Component onNavigate={(slug: string, anchor?: string) => navigateRef.current?.(slug, anchor)} />
                 </Suspense>
               )
             }

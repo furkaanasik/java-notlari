@@ -14,6 +14,9 @@ const HashMapBuckets = lazy(() =>
 const DecoratorChain = lazy(() =>
   import('./DecoratorChain').then((mod) => ({ default: mod.DecoratorChain })),
 )
+const InterviewNotes = lazy(() =>
+  import('./InterviewNotes').then((mod) => ({ default: mod.InterviewNotes })),
+)
 
 /**
  * Markdown içinden çağrılabilen interaktif bileşenler.
@@ -28,7 +31,8 @@ const DecoratorChain = lazy(() =>
  * Yeni bileşen eklemek: dosyayı bu klasöre koy, aşağıya bir satır ekle.
  */
 export type InteractiveProps = {
-  onNavigate?: (slug: string) => void
+  /** İkinci argüman: gidilecek başlık kimliği. */
+  onNavigate?: (slug: string, anchor?: string) => void
 }
 
 export const INTERACTIVE: Record<string, ComponentType<InteractiveProps>> = {
@@ -36,4 +40,5 @@ export const INTERACTIVE: Record<string, ComponentType<InteractiveProps>> = {
   SmellMap,
   HashMapBuckets,
   DecoratorChain,
+  InterviewNotes,
 }

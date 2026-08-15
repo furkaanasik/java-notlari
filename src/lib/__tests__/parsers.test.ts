@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { markLines, splitComparison } from '../code-analysis'
+import { extractOutput, markLines, splitComparison } from '../code-analysis'
 import { fold, search, sections } from '../search'
 import { patternGraph } from '../pattern-graph'
 import { smellMap } from '../smell-map'
@@ -66,6 +66,43 @@ describe('markLines', () => {
 
   it('aynı satırda ikisi de varsa karar vermez', () => {
     expect(markLines('x(); // ❌ mi ✅ mi').size).toBe(0)
+  })
+})
+
+describe('extractOutput', () => {
+  it('yazdırma satırlarının yorumundan çıktıyı toplar', () => {
+    const output = extractOutput(
+      [
+        'Integer a = 127, b = 127;',
+        'System.out.println(a == b);  // true  ✅ (cache)',
+        'System.out.println(a + b);   // 254',
+      ].join('\n'),
+    )
+
+    expect(output?.map((line) => line.value)).toEqual(['true', '254'])
+  })
+
+  it('emoji ve parantezli açıklamayı çıktıdan ayıklar', () => {
+    const output = extractOutput(
+      [
+        'System.out.println(a == b);  // true  ✅ (cache\'den aynı nesne)',
+        'System.out.println(c == d);  // false ❌ (yeni nesne yaratılır)',
+        'System.out.println(x);       // 42 — açıklama',
+      ].join('\n'),
+    )
+
+    expect(output?.map((line) => line.value)).toEqual(['true', 'false', '42'])
+  })
+
+  it('açıklama yorumlarını çıktı sanmaz', () => {
+    const output = extractOutput(
+      ['int a = 1;    // stack’te tutulur', 'int b = 2;    // yine stack'].join('\n'),
+    )
+    expect(output).toBeNull()
+  })
+
+  it('tek satırlık çıktı için panel açmaz', () => {
+    expect(extractOutput('System.out.println(x); // 5')).toBeNull()
   })
 })
 

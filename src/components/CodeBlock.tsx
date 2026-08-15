@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { HighlightedCode } from './HighlightedCode'
-import { splitComparison, type Segment } from '../lib/code-analysis'
+import { extractOutput, splitComparison, type Segment } from '../lib/code-analysis'
 
 type Props = {
   language: string | null
@@ -9,18 +9,45 @@ type Props = {
 
 export function CodeBlock({ language, code }: Props) {
   const comparison = splitComparison(code)
+  const [showOutput, setShowOutput] = useState(false)
 
   if (comparison) {
     return <ComparisonBlock language={language} segments={comparison} raw={code} />
   }
 
+  const output = extractOutput(code)
+
   return (
     <div className="code-block">
       <div className="code-block__bar">
         <span className="code-block__lang">{language ?? 'kod'}</span>
-        <CopyButton code={code} />
+        <div className="code-block__actions">
+          {output && (
+            <button
+              type="button"
+              className="code-block__copy"
+              aria-pressed={showOutput}
+              onClick={() => setShowOutput((value) => !value)}
+            >
+              {showOutput ? 'Çıktıyı gizle' : 'Çıktı'}
+            </button>
+          )}
+          <CopyButton code={code} />
+        </div>
       </div>
+
       <HighlightedCode code={code} language={language} />
+
+      {output && showOutput && (
+        <div className="code-output">
+          <p className="code-output__label">
+            Beklenen çıktı — koddaki yorumlardan derlendi, çalıştırılmadı
+          </p>
+          <pre>
+            <code>{output.map((line) => line.value).join('\n')}</code>
+          </pre>
+        </div>
+      )}
     </div>
   )
 }

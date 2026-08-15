@@ -123,3 +123,44 @@ export function markLines(code: string): Map<number, LineMark> {
 
   return marks
 }
+
+export type OutputLine = { source: string; value: string }
+
+/**
+ * `System.out.println(...)` satırlarının sonundaki yorumlardan beklenen
+ * çıktıyı toplar.
+ *
+ * Bu bir çalıştırma değil, dokümanın kendi iddiasının derlenmesidir: örnekler
+ * zaten "// true", "// 5" gibi sonucu yazıyor. Yalnızca yazdırma satırlarındaki
+ * yorumlar alınır; açıklama amaçlı yorumlar ("// stack'te tutulur") dışarıda
+ * kalsın diye başka satırlara bakılmaz.
+ *
+ * En az iki satır bulunmazsa null döner — tek satırlık bir çıktı paneli
+ * göstermeye değmez.
+ */
+export function extractOutput(code: string): OutputLine[] | null {
+  const lines: OutputLine[] = []
+
+  for (const line of code.split('\n')) {
+    const match = /^\s*System\.(?:out|err)\.print(?:ln|f)?\s*\(.*?\)\s*;\s*\/\/\s*(.+?)\s*$/.exec(
+      line,
+    )
+    if (!match) continue
+
+    /*
+     * Yorumun ilk parçası sonuç, gerisi açıklamadır:
+     *   "true  ✅ (cache'den aynı nesne)"  →  "true"
+     *   "false ❌ (yeni nesne yaratılır)"  →  "false"
+     * Kesme noktası: çift boşluk, ✅/❌ işareti, açılan parantez veya tire.
+     */
+    const value = match[1]
+      .split(/\s{2,}|\s[✅❌]|\s\(|\s[—–-]\s/u)[0]
+      .replace(/[✅❌]/gu, '')
+      .trim()
+    if (value === '') continue
+
+    lines.push({ source: line.trim(), value })
+  }
+
+  return lines.length >= 2 ? lines : null
+}

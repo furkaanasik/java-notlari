@@ -1138,3 +1138,96 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* ---------------- Mülakat notları ---------------- */
+
+.markdown .interview {
+  margin-block: var(--space-block);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-code);
+  background: var(--c-bg-panel);
+  overflow: hidden;
+}
+
+.interview__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.markdown .interview__count {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--c-text-muted);
+}
+
+.markdown .interview__count strong {
+  color: var(--c-text-strong);
+}
+
+.interview__bar select {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.75rem;
+  color: var(--c-text-strong);
+  background: var(--c-bg-content);
+  border: 1px solid var(--c-border);
+  border-radius: 5px;
+}
+
+.interview__group {
+  padding: 0.75rem 0.85rem;
+}
+
+.interview__group + .interview__group {
+  border-top: 1px solid var(--c-border-soft);
+}
+
+.markdown .interview__source {
+  margin: 0 0 0.5rem;
+  font-size: var(--text-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-accent-strong);
+}
+
+.markdown .interview ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.markdown .interview li {
+  margin: 0 0 0.9rem;
+  padding: 0;
+}
+
+.markdown .interview li:last-child {
+  margin-bottom: 0;
+}
+
+.markdown .interview__excerpt {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-inline-start: 2px solid var(--c-border);
+  border-radius: 0;
+  background: transparent;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--c-text);
+}
+
+.interview__link {
+  margin-top: 0.25rem;
+  margin-inline-start: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--c-text-faint);
+}
+
+.interview__link:hover {
+  color: var(--c-accent-strong);
+  text-decoration: underline;
+}

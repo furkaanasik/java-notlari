@@ -22,12 +22,14 @@ npm run dev        # http://localhost:5173
 | `npm run check:mermaid` | `content/` içindeki tüm mermaid bloklarını ayrıştırır |
 | `npm run check:render` | Çalışan bir sunucuya karşı gerçek tarayıcıda render doğrular |
 | `npm run shots` | Her iki temada ekran görüntüsü alır, konsol hatasında başarısız olur |
-| `npm run verify` | Derler, çıktıyı servis eder, tarayıcıda render'ı doğrular |
+| `npm run test` | Ayrıştırıcı ve içerik testleri (vitest) |
+| `npm run check:content` | Atıf, çapa ve bileşen çağrısı bütünlüğü |
+| `npm run verify` | Test → derleme → tarayıcıda render doğrulaması |
 
 Arama dizini ve interaktif bileşenler markdown'dan türetilir; `content/` değişince
 yeniden derlemek yeterlidir.
 
-`npm run build` **mermaid kontrolünü içerir**: bozuk bir diyagram derlemeyi
+`npm run build` **mermaid ve içerik bütünlüğü kontrollerini içerir**: bozuk bir diyagram derlemeyi
 kırar. `check:render` ayakta bir sunucu istediği için build'e bağlı değildir:
 
 ```bash
@@ -239,6 +241,22 @@ Ağır kütüphaneler ayrı parçalara bölündü ve ihtiyaç anında indiriliyo
 
 ---
 
+## Otomatik kontroller
+
+Markdown ile onu işleyen kod arasındaki bağı hiçbir derleyici doğrulamıyor;
+bu boşluğu iki ağ kapatır.
+
+**`check:content`** (build'e bağlı) — `X.md` atıfları var olan dosyayı gösteriyor
+mu, `](#çapa)` bağlantıları o dosyada bir başlığa denk geliyor mu, çağrılan
+interaktif bileşen kayıtlı mı. İlk çalıştırmasında 8 kırık çapa buldu.
+
+**`test`** — 33 test. Karşılaştırma ayrıştırıcısı, satır işaretleri, çıktı
+ayıklama, Türkçe katlama, başlık çıkarma ve bileşen işaretleri; ayrıca gerçek
+içeriğe karşı beklentiler (23 pattern düğümü, 22 koku, arama sonuçları). Bir md
+düzenlemesi PatternGraph'ı boşaltırsa test kırmızı olur.
+
+---
+
 ## Yayınlama
 
 Çıktı tamamen statiktir: `dist/` klasörünü herhangi bir yere koymak yeterli.
@@ -285,6 +303,18 @@ Animasyon yalnızca bir **durum değişimini** bildirir; süsleme yok. Süreler
 
 `prefers-reduced-motion: reduce` açıkken hepsi **tamamen** kapanır — kısaltılmaz,
 sıfırlanır. Yumuşak kaydırma da devre dışı kalır.
+
+---
+
+## Çevrimdışı çalışma
+
+Service worker ile site tamamen çevrimdışı çalışır ve telefona kurulabilir.
+Ön-önbelleğe yalnızca çekirdek girer (sayfa, stil, ana paket ≈ 860 kB);
+mermaid'in 400'den fazla küçük parçası ilk kullanıldıklarında önbelleğe alınır.
+Yeni sürüm sessizce güncellenir.
+
+Doğrulandı: ağ kapatıldıktan sonra dosyalar açılıyor, kod blokları ve
+vurgulama yerinde.
 
 ---
 

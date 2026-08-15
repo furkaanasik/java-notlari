@@ -34,8 +34,8 @@ jobs:
       - name: Tarayıcıyı kur
         run: npx playwright install --with-deps chromium
 
-      # Mermaid sözdizimi + tip kontrolü + derleme, ardından derlenmiş çıktıya
-      # karşı gerçek tarayıcıda diyagram render'ı ve konsol temizliği.
+      # Testler + mermaid sözdizimi + içerik bütünlüğü + tip kontrolü + derleme,
+      # ardından derlenmiş çıktıya karşı gerçek tarayıcıda render doğrulaması.
       - name: Derle ve doğrula
         run: npm run verify
 
