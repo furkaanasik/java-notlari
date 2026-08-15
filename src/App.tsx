@@ -141,7 +141,7 @@ export default function App() {
           <main id="icerik" ref={mainRef} className="min-w-0 flex-1 overflow-y-auto">
             <div className="content-pad mx-auto py-12">
               {doc ? (
-                <article className="markdown">
+                <article key={activeSlug} className="markdown doc-enter">
                   <Markdown source={body} theme={theme} onNavigate={openDoc} />
                 </article>
               ) : (

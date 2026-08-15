@@ -1,0 +1,145 @@
+/**
+ * Hareket.
+ *
+ * Kural: animasyon yalnızca bir DURUM DEĞİŞİMİNİ bildirir — bir şey açıldı,
+ * kapandı, seçildi, değişti. Süsleme yok, dikkat çekme yok.
+ *
+ * Süreler kısa (120-200 ms) ve yumuşama çıkışa yakın; okuma akışını bölmemeli.
+ * `prefers-reduced-motion` açıkken hepsi kapanır (dosyanın sonunda).
+ */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* ---- Doküman değişimi ----
+   Yeni içeriğin geldiği anlaşılsın; 120 ms, okumayı geciktirmez. */
+.doc-enter {
+  animation: rise-in 140ms ease-out;
+}
+
+/* ---- Katmanlar: arka plan söner, panel gelir ---- */
+.palette,
+.drawer,
+.mermaid-modal {
+  animation: fade-in 120ms ease-out;
+}
+
+.palette__panel {
+  animation: scale-in 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mermaid-modal__panel {
+  animation: scale-in 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer__panel {
+  animation: slide-in-left 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---- Seçim göstergeleri ----
+   Sol vurgu çizgisi ve zemin, sıçramadan yerine otursun. */
+.palette__hit,
+.smap__item,
+.pgraph__filter,
+.compare-tab {
+  transition:
+    background-color 120ms ease-out,
+    border-color 120ms ease-out,
+    color 120ms ease-out,
+    opacity 140ms ease-out;
+}
+
+/* İçindekiler ve sidebar'daki aktif işaret */
+aside nav a,
+aside nav button {
+  transition:
+    background-color 120ms ease-out,
+    border-color 160ms ease-out,
+    color 160ms ease-out;
+}
+
+/* ---- Karşılaştırma: sekme değişince içerik tazelensin ---- */
+.code-block--compare .code-block__body,
+.compare-split {
+  animation: fade-in 120ms ease-out;
+}
+
+/* ---- Tema geçişi ----
+   Yalnızca yüzeyler ve kenarlıklar; metin ve kod yeniden boyanmaz. */
+aside,
+header,
+.code-block,
+.table-wrap,
+.pgraph,
+.smap,
+.hmap,
+.dchain,
+.mermaid__canvas {
+  transition:
+    background-color 160ms ease-out,
+    border-color 160ms ease-out;
+}
+
+/* ---- Kopyalandı geri bildirimi ---- */
+.code-block__copy {
+  transition:
+    background-color 120ms ease-out,
+    color 120ms ease-out;
+}
+
+/* ---- Okundu işareti ---- */
+aside nav [aria-label='Okundu'] {
+  animation: fade-in 200ms ease-out;
+}
+
+/*
+ * Kullanıcı hareketi azaltmayı seçtiyse hiçbir şey oynamaz.
+ * Geçişler tamamen kapatılır — "çok kısa" değil, sıfır.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

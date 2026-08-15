@@ -269,6 +269,25 @@ diyagram veya tip hatası yayını durdurur.
 
 ---
 
+## Hareket
+
+Animasyon yalnızca bir **durum değişimini** bildirir; süsleme yok. Süreler
+120-200 ms, `src/styles/motion.css` içinde toplu:
+
+| Nerede | Ne |
+|---|---|
+| Doküman değişimi | 4 px yükselerek belirme |
+| Arama paleti, diyagram modalı | Arka plan söner, panel ölçeklenerek gelir |
+| Mobil çekmece | Soldan kayarak girer |
+| Seçim göstergeleri (sidebar, içindekiler, harita) | Renk ve kenar çizgisi geçişi |
+| Tema değişimi | Yalnızca yüzey ve kenarlık renkleri; metin yeniden boyanmaz |
+| Kod vurgulaması hazır olunca | 140 ms sönümleme (blokların tek tek "pop" etmesini engeller) |
+
+`prefers-reduced-motion: reduce` açıkken hepsi **tamamen** kapanır — kısaltılmaz,
+sıfırlanır. Yumuşak kaydırma da devre dışı kalır.
+
+---
+
 ## Erişilebilirlik
 
 `axe-core` ile ölçüldü: koyu ve açık temada, üç farklı doküman ve mobil çekmece
