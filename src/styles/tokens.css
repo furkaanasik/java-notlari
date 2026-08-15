@@ -48,6 +48,7 @@
   --radius-code: 8px;
   --radius-inline: 3px;
   --item-h: 2.25rem; /* sidebar satır yüksekliği */
+  --compare-bleed: 5rem; /* yan yana karşılaştırmanın gövdeden taşma payı */
 
   /* ---- Renk: DARK (temel) ----
      Nötr skala zinc, tek vurgu rengi amber. */

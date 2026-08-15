@@ -215,6 +215,139 @@
   content: none;
 }
 
+/* ---------- Satır işaretleri (❌ / ✅) ---------- */
+
+.markdown .code-block code .line--bad,
+.markdown .code-block code .line--good {
+  position: relative;
+  box-shadow: inset 2px 0 0 var(--mark-color);
+  background: color-mix(in oklch, var(--mark-color) 12%, transparent);
+}
+
+.markdown .code-block code .line--bad {
+  --mark-color: oklch(0.62 0.19 25);
+}
+
+.markdown .code-block code .line--good {
+  --mark-color: oklch(0.68 0.15 155);
+}
+
+.markdown .code-block code .line--bad::before,
+.markdown .code-block code .line--good::before {
+  color: color-mix(in oklch, var(--mark-color) 70%, oklch(0.7 0 0));
+}
+
+/* ---------- Önce / Sonra karşılaştırması ---------- */
+
+.markdown .code-block--compare {
+  transition: border-color 160ms;
+}
+
+.markdown .code-block--compare[data-kind='before'] {
+  border-color: color-mix(in oklch, oklch(0.62 0.19 25) 45%, var(--c-border));
+}
+
+.markdown .code-block--compare[data-kind='after'] {
+  border-color: color-mix(in oklch, oklch(0.68 0.15 155) 45%, var(--c-border));
+}
+
+.markdown .code-block__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.compare-tabs {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.compare-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 5px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: oklch(0.62 0.005 286);
+  transition: background-color 120ms, color 120ms;
+}
+
+.compare-tab:hover {
+  background: oklch(1 0 0 / 0.06);
+}
+
+.compare-tab__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.75;
+}
+
+.compare-tab--before[data-active='true'] {
+  color: oklch(0.72 0.17 25);
+  background: oklch(0.62 0.19 25 / 0.15);
+}
+
+.compare-tab--after[data-active='true'] {
+  color: oklch(0.76 0.14 155);
+  background: oklch(0.68 0.15 155 / 0.15);
+}
+
+.compare-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Yan yana modda iki kod sütunu 68ch'e sığmıyor — yer varsa gövdeyi taşır. */
+@media (min-width: 1180px) {
+  .markdown .code-block--compare:has(.compare-split) {
+    width: calc(100% + 2 * var(--compare-bleed));
+    margin-inline: calc(-1 * var(--compare-bleed));
+  }
+}
+
+.compare-pane {
+  min-width: 0;
+}
+
+.compare-pane + .compare-pane {
+  border-left: 1px solid oklch(1 0 0 / 0.08);
+}
+
+.compare-pane__label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
+}
+
+.compare-pane--before .compare-pane__label {
+  color: oklch(0.72 0.17 25);
+}
+
+.compare-pane--after .compare-pane__label {
+  color: oklch(0.76 0.14 155);
+}
+
+@media (max-width: 900px) {
+  .compare-split {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-pane + .compare-pane {
+    border-left: none;
+    border-top: 1px solid oklch(1 0 0 / 0.08);
+  }
+}
+
 /* ---------- Mermaid ---------- */
 
 .markdown .mermaid {
